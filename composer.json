@@ -8,10 +8,19 @@
         "framework"
     ],
     "license": "MIT",
+    "repositories": [
+        {
+            "type": "path",
+            "url": "C:/volta-php"
+        }
+    ],
     "require": {
         "php": "^8.3",
+        "darknautica/volta-php": "@dev",
         "laravel/framework": "^13.0",
-        "laravel/tinker": "^3.0"
+        "laravel/sanctum": "*",
+        "laravel/tinker": "^3.0",
+        "stripe/stripe-php": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

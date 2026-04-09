@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(php artisan:*)",
+      "Bash(where php:*)",
+      "Bash(ls /c/php*/php.exe)",
+      "Read(//c/xampp/php/**)",
+      "Read(//c/laragon/bin/**)",
+      "Bash(/c/Users/Jayden/.config/herd/bin/php.bat artisan:*)",
+      "Bash(./vendor/bin/pest:*)",
+      "Bash(/c/Users/Jayden/.config/herd/bin/php.bat:*)",
+      "Bash(\"/c/Users/Jayden/.config/herd/bin/php.bat\" artisan:*)",
+      "Bash(where php.exe)",
+      "Read(//c/Users/Jayden/Herd/**)",
+      "Read(//c/Program Files/Herd/**)",
+      "Read(//c/Users/Jayden/AppData/Local/Programs/**)",
+      "Read(//c/Users/Jayden/.config/herd/**)",
+      "Read(//c/Users/Jayden/**)",
+      "Bash(\"C:/Users/Jayden/.config/herd/bin/php84/php.exe\" artisan:*)",
+      "Bash(\"C:/Users/Jayden/.config/herd/bin/php84/php.exe\" vendor/bin/pest)",
+      "Bash(C:/Users/Jayden/.config/herd/bin/php84/php.exe artisan:*)",
+      "Bash(curl -s -o /dev/null -w '%{http_code}' http://volta.test/docs/__TRACKED_VAR__)",
+      "Bash(curl -s \"http://volta.test/docs/quick-start\")"
+    ]
+  }
+}
