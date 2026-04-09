@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0b7f065dc3c5f1db635d49cc42c6b6cb",
+    "content-hash": "f6c4ebea6c68f5ded224a19bc4728d08",
     "packages": [
         {
             "name": "brick/math",
@@ -137,11 +137,17 @@
         },
         {
             "name": "darknautica/volta-php",
-            "version": "dev-main",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/DarkNautica/volta-php.git",
+                "reference": "6ebd5c90cba559205897f2694c0526ba0a5346cd"
+            },
             "dist": {
-                "type": "path",
-                "url": "C:/volta-php",
-                "reference": "d25aaa463508ac4094420fa679d3478b8549d69c"
+                "type": "zip",
+                "url": "https://api.github.com/repos/DarkNautica/volta-php/zipball/6ebd5c90cba559205897f2694c0526ba0a5346cd",
+                "reference": "6ebd5c90cba559205897f2694c0526ba0a5346cd",
+                "shasum": ""
             },
             "require": {
                 "guzzlehttp/guzzle": "^7.0",
@@ -156,12 +162,12 @@
             "type": "library",
             "extra": {
                 "laravel": {
-                    "providers": [
-                        "DarkNautica\\Volta\\VoltaServiceProvider"
-                    ],
                     "aliases": {
                         "Volta": "DarkNautica\\Volta\\Facades\\Volta"
-                    }
+                    },
+                    "providers": [
+                        "DarkNautica\\Volta\\VoltaServiceProvider"
+                    ]
                 }
             },
             "autoload": {
@@ -169,11 +175,7 @@
                     "DarkNautica\\Volta\\": "src/"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "DarkNautica\\Volta\\Tests\\": "tests/"
-                }
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -193,9 +195,11 @@
                 "sdk",
                 "stripe"
             ],
-            "transport-options": {
-                "relative": false
-            }
+            "support": {
+                "issues": "https://github.com/DarkNautica/volta-php/issues",
+                "source": "https://github.com/DarkNautica/volta-php/tree/v1.0.0"
+            },
+            "time": "2026-04-09T16:36:29+00:00"
         },
         {
             "name": "dflydev/dot-access-data",
@@ -9270,9 +9274,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "darknautica/volta-php": 20
-    },
+    "stability-flags": {},
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
