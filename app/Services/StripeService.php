@@ -124,6 +124,7 @@ class StripeService
                 if ($user) {
                     $user->update([
                         'plan' => $metadata->plan ?? null,
+                        'billing_period' => $metadata->billing_period ?? 'monthly',
                         'trial_ends_at' => null,
                     ]);
                 }
