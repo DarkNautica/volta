@@ -83,24 +83,26 @@
     <div x-data="{ annual: false, loadingPlan: null }">
 
         {{-- Toggle --}}
-        <div style="display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 2.5rem;">
-            <span style="font-size: 14px; font-weight: 500; transition: color 0.2s;"
+        <div style="display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 2.5rem; cursor: default;">
+            <span @click="annual = false"
+                  style="font-size: 14px; font-weight: 500; cursor: pointer; transition: color 0.2s;"
                   :style="!annual ? 'color: #f0f0ff' : 'color: rgba(240,240,255,0.4)'">
                 Monthly
             </span>
             <div @click="annual = !annual"
-                 style="width: 48px; height: 26px; border-radius: 13px; cursor: pointer; position: relative; transition: background 0.25s; flex-shrink: 0;"
-                 :style="annual ? 'background: #00C2FF' : 'background: rgba(255,255,255,0.15)'">
+                 style="width: 48px; height: 26px; border-radius: 13px; cursor: pointer; position: relative; transition: background 0.25s; flex-shrink: 0; display: block;"
+                 :style="annual ? 'background: #00C2FF' : 'background: rgba(255,255,255,0.2)'">
                 <div style="position: absolute; top: 3px; width: 20px; height: 20px; border-radius: 50%; background: white; transition: left 0.25s; box-shadow: 0 1px 4px rgba(0,0,0,0.3);"
                      :style="annual ? 'left: 25px' : 'left: 3px'">
                 </div>
             </div>
-            <span style="font-size: 14px; font-weight: 500; transition: color 0.2s;"
+            <span @click="annual = true"
+                  style="font-size: 14px; font-weight: 500; cursor: pointer; transition: color 0.2s;"
                   :style="annual ? 'color: #f0f0ff' : 'color: rgba(240,240,255,0.4)'">
                 Annual
             </span>
-            <span x-show="annual" x-transition x-cloak
-                  style="font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 100px; background: rgba(0,194,255,0.15); color: #00C2FF; letter-spacing: 0.06em; text-transform: uppercase;">
+            <span x-show="annual" x-cloak
+                  style="font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 100px; background: rgba(0,194,255,0.15); color: #00C2FF; letter-spacing: 0.06em; text-transform: uppercase; display: inline-block;">
                 Save 20%
             </span>
         </div>
