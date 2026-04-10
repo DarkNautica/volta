@@ -58,7 +58,7 @@
                 </p>
             </div>
             @if($user->plan)
-                <form method="POST" action="/billing/portal">
+                <form method="POST" action="/dashboard/billing/portal">
                     @csrf
                     <button
                         type="submit"
@@ -101,7 +101,7 @@
                         $thisOrder = $planOrder[$key] ?? 0;
                         $label = $currentOrder > 0 && $thisOrder < $currentOrder ? 'Downgrade' : ($currentOrder > 0 && $thisOrder > $currentOrder ? 'Upgrade' : 'Subscribe');
                     @endphp
-                    <form method="POST" action="/billing/subscribe" x-data="{ loading: false }" @submit="loading = true">
+                    <form method="POST" action="/dashboard/billing/subscribe" x-data="{ loading: false }" @submit="loading = true">
                         @csrf
                         <input type="hidden" name="plan" value="{{ $key }}">
                         <button

@@ -49,7 +49,7 @@ class BillingController extends Controller
             ]],
             'mode' => 'subscription',
             'success_url' => url('/billing?subscribed=1'),
-            'cancel_url' => url('/billing'),
+            'cancel_url' => url('/dashboard/billing'),
             'metadata' => [
                 'user_id' => $user->id,
                 'plan' => $plan,
@@ -64,14 +64,14 @@ class BillingController extends Controller
         $user = $request->user();
 
         if (! $user->stripe_customer_id) {
-            return redirect('/billing')->with('error', 'No active subscription found.');
+            return redirect('/dashboard/billing')->with('error', 'No active subscription found.');
         }
 
         Stripe::setApiKey(config('volta.stripe_secret'));
 
         $session = PortalSession::create([
             'customer' => $user->stripe_customer_id,
-            'return_url' => url('/billing'),
+            'return_url' => url('/dashboard/billing'),
         ]);
 
         return redirect($session->url);

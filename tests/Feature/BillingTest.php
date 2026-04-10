@@ -10,13 +10,13 @@ it('allows authenticated user to visit billing page', function () {
     ]);
 
     $this->actingAs($user)
-        ->get('/billing')
+        ->get('/dashboard/billing')
         ->assertOk()
         ->assertSee('Billing');
 });
 
 it('prevents unauthenticated user from accessing billing', function () {
-    $this->get('/billing')
+    $this->get('/dashboard/billing')
         ->assertRedirect('/login');
 });
 
@@ -42,7 +42,7 @@ it('subscribe redirects to stripe checkout url', function () {
         ->andReturn((object) ['id' => 'cus_test_123']);
 
     $this->actingAs($user)
-        ->post('/billing/subscribe', ['plan' => 'indie'])
+        ->post('/dashboard/billing/subscribe', ['plan' => 'indie'])
         ->assertRedirect($fakeSessionUrl);
 
     expect($user->fresh()->stripe_customer_id)->toBe('cus_test_123');
@@ -53,12 +53,6 @@ it('webhook updates user plan on checkout.session.completed', function () {
         'stripe_customer_id' => 'cus_test_456',
         'trial_ends_at' => now()->addDays(3),
     ]);
-
-    $stripeService = app(StripeService::class);
-
-    // Use reflection to call the webhook logic with a simulated event
-    $request = new \Illuminate\Http\Request;
-    $request->headers->set('Stripe-Signature', 'test');
 
     // Simulate the event processing directly on the user
     $user->update([

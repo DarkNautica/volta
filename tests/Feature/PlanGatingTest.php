@@ -22,7 +22,7 @@ test('trial user with expired trial is redirected to billing', function () {
 
     $this->actingAs($user)
         ->get('/dashboard')
-        ->assertRedirect('/billing');
+        ->assertRedirect('/dashboard/billing');
 });
 
 test('user on indie plan cannot create a second app', function () {

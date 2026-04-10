@@ -110,6 +110,10 @@
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
                 Billing
             </a>
+            <a href="/docs" class="sidebar-link {{ request()->is('docs*') ? 'active' : '' }}">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                Docs
+            </a>
             <a href="/dashboard/settings" class="sidebar-link {{ request()->is('dashboard/settings*') ? 'active' : '' }}">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                 Settings
@@ -164,6 +168,34 @@
         </header>
 
         <main class="p-6 lg:p-10">
+            {{-- Flash Messages --}}
+            @if(session('success'))
+                <div
+                    x-data="{ show: true }"
+                    x-init="setTimeout(() => show = false, 4000)"
+                    x-show="show"
+                    x-transition:leave="transition ease-in duration-200"
+                    x-transition:leave-start="opacity-100"
+                    x-transition:leave-end="opacity-0"
+                    class="rounded-lg p-4 mb-6"
+                    style="border-left: 3px solid #86efac; background-color: rgba(134,239,172,0.08);"
+                >
+                    <p class="text-sm" style="color: #86efac;">{{ session('success') }}</p>
+                </div>
+            @endif
+
+            @if(session('error'))
+                <div
+                    x-data="{ show: true }"
+                    x-show="show"
+                    class="rounded-lg p-4 mb-6 flex items-center justify-between"
+                    style="border-left: 3px solid #ef4444; background-color: rgba(239,68,68,0.08);"
+                >
+                    <p class="text-sm" style="color: #ef4444;">{{ session('error') }}</p>
+                    <button @click="show = false" class="ml-4" style="color: #ef4444;">&times;</button>
+                </div>
+            @endif
+
             @yield('content')
         </main>
     </div>

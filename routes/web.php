@@ -5,7 +5,9 @@ use App\Http\Controllers\BillingController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DocsController;
 use App\Http\Controllers\PortalController;
+use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\StripeWebhookController;
+use App\Http\Controllers\UsageController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', fn () => view('welcome'));
@@ -30,7 +32,7 @@ Route::middleware('guest')->group(function () {
 
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
 
-// Dashboard
+// Dashboard (requires active plan or trial)
 Route::middleware(['auth', 'plan.active'])->prefix('dashboard')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/apps', [DashboardController::class, 'apps'])->name('dashboard.apps');
@@ -42,13 +44,18 @@ Route::middleware(['auth', 'plan.active'])->prefix('dashboard')->group(function 
     Route::delete('/apps/{app}/models/{appModel}', [DashboardController::class, 'destroyAppModel'])->name('dashboard.apps.models.destroy');
     Route::post('/apps/{app}/regenerate-key', [DashboardController::class, 'regenerateKey'])->name('dashboard.apps.regenerate-key');
     Route::delete('/apps/{app}/users/{appUser}', [DashboardController::class, 'destroyAppUser'])->name('dashboard.apps.users.destroy');
+    Route::get('/usage', [UsageController::class, 'index'])->name('dashboard.usage');
 });
 
-// Billing
-Route::middleware('auth')->prefix('billing')->group(function () {
-    Route::get('/', [BillingController::class, 'index'])->name('billing');
-    Route::post('/subscribe', [BillingController::class, 'subscribe'])->name('billing.subscribe');
-    Route::post('/portal', [BillingController::class, 'portal'])->name('billing.portal');
+// Billing, Settings (auth only — accessible even with expired trial)
+Route::middleware('auth')->prefix('dashboard')->group(function () {
+    Route::get('/billing', [BillingController::class, 'index'])->name('billing');
+    Route::post('/billing/subscribe', [BillingController::class, 'subscribe'])->name('billing.subscribe');
+    Route::post('/billing/portal', [BillingController::class, 'portal'])->name('billing.portal');
+    Route::get('/settings', [SettingsController::class, 'index'])->name('dashboard.settings');
+    Route::post('/settings/profile', [SettingsController::class, 'updateProfile'])->name('settings.profile');
+    Route::post('/settings/password', [SettingsController::class, 'updatePassword'])->name('settings.password');
+    Route::delete('/settings/account', [SettingsController::class, 'destroy'])->name('settings.destroy');
 });
 
 // Stripe webhook (no auth, no CSRF)

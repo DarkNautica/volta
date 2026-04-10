@@ -13,7 +13,7 @@ class CheckPlan
         $user = $request->user();
 
         if (! $user->plan && $user->trialExpired()) {
-            return redirect('/billing')->with('error', 'Your trial has ended. Choose a plan to continue.');
+            return redirect('/dashboard/billing')->with('error', 'Your trial has ended. Choose a plan to continue.');
         }
 
         return $next($request);
