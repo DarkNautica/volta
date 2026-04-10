@@ -4,8 +4,8 @@
 
 @section('content')
     <div class="mb-8">
-        <h1 class="text-4xl" style="color: var(--text);">Billing1</h1>
-        <p class="mt-1" style="color: var(--muted);">Manage your subscription and billing details11111.</p>
+        <h1 class="text-4xl" style="color: var(--text);">Billing</h1>
+        <p class="mt-1" style="color: var(--muted);">Manage your subscription and billing details.</p>
     </div>
 
     {{-- Success Banner --}}
@@ -80,7 +80,7 @@
     </style>
 
     {{-- Plans --}}
-    <div x-data="{ annual: false, loadingPlan: null }">
+    <div x-cloak x-data="{ annual: false, loadingPlan: null }">
 
         {{-- Toggle --}}
         <div style="display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 2.5rem;">

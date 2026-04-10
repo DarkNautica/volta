@@ -13,6 +13,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet">
 
     <style>
+        [x-cloak] { display: none !important; }
+
         :root {
             --bg: #080810;
             --surface: #0e0e1a;
