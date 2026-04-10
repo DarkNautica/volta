@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Stripe\BillingPortal\Session as PortalSession;
@@ -22,7 +23,14 @@ class BillingController extends Controller
     {
         $request->validate(['plan' => 'required|in:indie,studio,agency']);
 
-        $plan = config("volta.plans.{$request->plan}");
+        $plan = $request->plan;
+        $priceId = config("volta.stripe_prices.{$plan}");
+        $planConfig = config("volta.plans.{$plan}");
+
+        if (! $priceId) {
+            return back()->with('error', 'This plan is not configured yet.');
+        }
+
         Stripe::setApiKey(config('volta.stripe_secret'));
 
         $user = $request->user();
@@ -36,18 +44,16 @@ class BillingController extends Controller
             'customer' => $user->stripe_customer_id,
             'payment_method_types' => ['card'],
             'line_items' => [[
-                'price_data' => [
-                    'currency' => 'usd',
-                    'product_data' => ['name' => "Volta {$plan['name']} Plan"],
-                    'unit_amount' => $plan['price'],
-                    'recurring' => ['interval' => 'month'],
-                ],
+                'price' => $priceId,
                 'quantity' => 1,
             ]],
             'mode' => 'subscription',
-            'success_url' => url('/dashboard?subscribed=1'),
+            'success_url' => url('/billing?subscribed=1'),
             'cancel_url' => url('/billing'),
-            'metadata' => ['plan' => $request->plan],
+            'metadata' => [
+                'user_id' => $user->id,
+                'plan' => $plan,
+            ],
         ]);
 
         return redirect($session->url);
@@ -55,13 +61,26 @@ class BillingController extends Controller
 
     public function portal(Request $request)
     {
+        $user = $request->user();
+
+        if (! $user->stripe_customer_id) {
+            return redirect('/billing')->with('error', 'No active subscription found.');
+        }
+
         Stripe::setApiKey(config('volta.stripe_secret'));
 
         $session = PortalSession::create([
-            'customer' => $request->user()->stripe_customer_id,
+            'customer' => $user->stripe_customer_id,
             'return_url' => url('/billing'),
         ]);
 
         return redirect($session->url);
+    }
+
+    public static function planFromPriceId(string $priceId): ?string
+    {
+        $prices = config('volta.stripe_prices');
+
+        return array_search($priceId, $prices) ?: null;
     }
 }

@@ -8,6 +8,31 @@
         <p class="mt-1" style="color: var(--muted);">Manage your subscription and billing details.</p>
     </div>
 
+    {{-- Success Banner --}}
+    @if(request('subscribed'))
+        <div
+            x-data="{ show: true }"
+            x-init="setTimeout(() => show = false, 5000)"
+            x-show="show"
+            x-transition:leave="transition ease-in duration-200"
+            x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
+            class="rounded-xl p-5 mb-6"
+            style="background-color: var(--surface); border: 2px solid #86efac;"
+        >
+            <p class="text-sm" style="color: #86efac;">
+                You're now on the <strong>{{ $user->planName() }}</strong> plan. Welcome aboard!
+            </p>
+        </div>
+    @endif
+
+    {{-- Error Banner --}}
+    @if(session('error'))
+        <div class="rounded-xl p-5 mb-6" style="background-color: var(--surface); border: 2px solid #ef4444;">
+            <p class="text-sm" style="color: #ef4444;">{{ session('error') }}</p>
+        </div>
+    @endif
+
     {{-- Trial / Expired Banner --}}
     @if($user->onTrial())
         <div class="rounded-xl p-5 mb-6" style="background-color: var(--surface); border: 2px solid var(--accent);">
@@ -76,15 +101,22 @@
                         $thisOrder = $planOrder[$key] ?? 0;
                         $label = $currentOrder > 0 && $thisOrder < $currentOrder ? 'Downgrade' : ($currentOrder > 0 && $thisOrder > $currentOrder ? 'Upgrade' : 'Subscribe');
                     @endphp
-                    <form method="POST" action="/billing/subscribe">
+                    <form method="POST" action="/billing/subscribe" x-data="{ loading: false }" @submit="loading = true">
                         @csrf
                         <input type="hidden" name="plan" value="{{ $key }}">
                         <button
                             type="submit"
-                            class="w-full px-5 py-3 rounded-lg text-sm font-semibold transition-all hover:opacity-90"
+                            class="w-full px-5 py-3 rounded-lg text-sm font-semibold transition-all hover:opacity-90 flex items-center justify-center gap-2"
                             style="background-color: var(--accent); color: var(--bg);"
+                            :disabled="loading"
+                            :style="loading && 'opacity: 0.6; cursor: not-allowed;'"
                         >
-                            {{ $label }}
+                            <svg x-show="loading" x-cloak class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                            </svg>
+                            <span x-show="!loading">{{ $label }}</span>
+                            <span x-show="loading" x-cloak>Redirecting to Stripe...</span>
                         </button>
                     </form>
                 @endif

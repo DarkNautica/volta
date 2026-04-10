@@ -18,6 +18,10 @@ return Application::configure(basePath: dirname(__DIR__))
             'plan.active' => \App\Http\Middleware\CheckPlan::class,
             'plan.app-limit' => \App\Http\Middleware\CheckAppLimit::class,
         ]);
+
+        $middleware->validateCsrfTokens(except: [
+            'stripe/webhook',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

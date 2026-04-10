@@ -44,9 +44,9 @@
                     class="w-full px-4 py-3 rounded-lg text-sm outline-none transition-all focus:ring-2 appearance-none"
                     style="background-color: var(--surface2); border: 1px solid var(--border); color: var(--text); --tw-ring-color: var(--accent);"
                 >
-                    <option value="Anthropic" {{ old('ai_provider') === 'Anthropic' ? 'selected' : '' }}>Anthropic</option>
-                    <option value="OpenAI" {{ old('ai_provider') === 'OpenAI' ? 'selected' : '' }}>OpenAI</option>
-                    <option value="Gemini" {{ old('ai_provider') === 'Gemini' ? 'selected' : '' }}>Gemini</option>
+                    <option value="anthropic" {{ old('ai_provider') === 'anthropic' ? 'selected' : '' }}>Anthropic</option>
+                    <option value="openai" {{ old('ai_provider') === 'openai' ? 'selected' : '' }}>OpenAI</option>
+                    <option value="gemini" {{ old('ai_provider') === 'gemini' ? 'selected' : '' }}>Gemini</option>
                 </select>
                 @error('ai_provider')
                     <p class="mt-1 text-sm text-red-400">{{ $message }}</p>

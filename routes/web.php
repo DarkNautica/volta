@@ -5,6 +5,7 @@ use App\Http\Controllers\BillingController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DocsController;
 use App\Http\Controllers\PortalController;
+use App\Http\Controllers\StripeWebhookController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', fn () => view('welcome'));
@@ -49,3 +50,6 @@ Route::middleware('auth')->prefix('billing')->group(function () {
     Route::post('/subscribe', [BillingController::class, 'subscribe'])->name('billing.subscribe');
     Route::post('/portal', [BillingController::class, 'portal'])->name('billing.portal');
 });
+
+// Stripe webhook (no auth, no CSRF)
+Route::post('/stripe/webhook', [StripeWebhookController::class, 'handle'])->name('stripe.webhook');
