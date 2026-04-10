@@ -80,7 +80,7 @@
     </style>
 
     {{-- Plans --}}
-    <div x-data="{ annual: false }">
+    <div x-data="{ annual: false, loadingPlan: null }">
 
         {{-- Toggle --}}
         <div style="display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 2.5rem;">
@@ -151,16 +151,15 @@
                         <input type="hidden" name="plan" value="indie">
                         <input type="hidden" name="billing_period" :value="annual ? 'annual' : 'monthly'">
                         <button type="submit"
-                                x-data="{ loading: false }"
-                                @click="loading = true"
-                                :disabled="loading"
+                                :disabled="loadingPlan === 'indie'"
+                                @click="loadingPlan = 'indie'"
                                 style="width: 100%; padding: 13px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; background: transparent; color: #f0f0ff; border: 1px solid rgba(255,255,255,0.15); transition: all 0.2s;"
                                 onmouseover="this.style.borderColor='#00C2FF'; this.style.color='#00C2FF';"
                                 onmouseout="this.style.borderColor='rgba(255,255,255,0.15)'; this.style.color='#f0f0ff';">
-                            <span x-show="!loading" x-text="annual ? '{{ $currentOrder > 1 ? 'Downgrade' : 'Subscribe' }} — $182/yr' : '{{ $currentOrder > 1 ? 'Downgrade' : 'Subscribe' }} — $19/mo'">
+                            <span x-show="loadingPlan !== 'indie'" x-text="annual ? '{{ $currentOrder > 1 ? 'Downgrade' : 'Subscribe' }} — $182/yr' : '{{ $currentOrder > 1 ? 'Downgrade' : 'Subscribe' }} — $19/mo'">
                                 {{ $currentOrder > 1 ? 'Downgrade' : 'Subscribe' }} — $19/mo
                             </span>
-                            <span x-show="loading" x-cloak style="display: flex; align-items: center; justify-content: center; gap: 6px;">
+                            <span x-show="loadingPlan === 'indie'" x-cloak style="display:flex;align-items:center;justify-content:center;gap:6px;">
                                 <svg style="width:14px;height:14px;animation:spin 1s linear infinite" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
                                 </svg>
@@ -213,16 +212,15 @@
                         <input type="hidden" name="plan" value="studio">
                         <input type="hidden" name="billing_period" :value="annual ? 'annual' : 'monthly'">
                         <button type="submit"
-                                x-data="{ loading: false }"
-                                @click="loading = true"
-                                :disabled="loading"
+                                :disabled="loadingPlan === 'studio'"
+                                @click="loadingPlan = 'studio'"
                                 style="width: 100%; padding: 13px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; background: #00C2FF; color: #080810; border: none; transition: opacity 0.2s;"
                                 onmouseover="this.style.opacity='0.85'"
                                 onmouseout="this.style.opacity='1'">
-                            <span x-show="!loading" x-text="annual ? '{{ $currentOrder > 0 && $currentOrder !== 2 ? ($currentOrder > 2 ? 'Downgrade' : 'Upgrade') : 'Subscribe' }} — $468/yr' : '{{ $currentOrder > 0 && $currentOrder !== 2 ? ($currentOrder > 2 ? 'Downgrade' : 'Upgrade') : 'Subscribe' }} — $49/mo'">
+                            <span x-show="loadingPlan !== 'studio'" x-text="annual ? '{{ $currentOrder > 0 && $currentOrder !== 2 ? ($currentOrder > 2 ? 'Downgrade' : 'Upgrade') : 'Subscribe' }} — $468/yr' : '{{ $currentOrder > 0 && $currentOrder !== 2 ? ($currentOrder > 2 ? 'Downgrade' : 'Upgrade') : 'Subscribe' }} — $49/mo'">
                                 {{ $currentOrder > 0 && $currentOrder !== 2 ? ($currentOrder > 2 ? 'Downgrade' : 'Upgrade') : 'Subscribe' }} — $49/mo
                             </span>
-                            <span x-show="loading" x-cloak style="display: flex; align-items: center; justify-content: center; gap: 6px;">
+                            <span x-show="loadingPlan === 'studio'" x-cloak style="display:flex;align-items:center;justify-content:center;gap:6px;">
                                 <svg style="width:14px;height:14px;animation:spin 1s linear infinite" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
                                 </svg>
@@ -269,16 +267,15 @@
                         <input type="hidden" name="plan" value="agency">
                         <input type="hidden" name="billing_period" :value="annual ? 'annual' : 'monthly'">
                         <button type="submit"
-                                x-data="{ loading: false }"
-                                @click="loading = true"
-                                :disabled="loading"
+                                :disabled="loadingPlan === 'agency'"
+                                @click="loadingPlan = 'agency'"
                                 style="width: 100%; padding: 13px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; background: transparent; color: #f0f0ff; border: 1px solid rgba(255,255,255,0.15); transition: all 0.2s;"
                                 onmouseover="this.style.borderColor='#00C2FF'; this.style.color='#00C2FF';"
                                 onmouseout="this.style.borderColor='rgba(255,255,255,0.15)'; this.style.color='#f0f0ff';">
-                            <span x-show="!loading" x-text="annual ? '{{ $currentOrder < 3 && $currentOrder > 0 ? 'Upgrade' : 'Subscribe' }} — $1,428/yr' : '{{ $currentOrder < 3 && $currentOrder > 0 ? 'Upgrade' : 'Subscribe' }} — $149/mo'">
+                            <span x-show="loadingPlan !== 'agency'" x-text="annual ? '{{ $currentOrder < 3 && $currentOrder > 0 ? 'Upgrade' : 'Subscribe' }} — $1,428/yr' : '{{ $currentOrder < 3 && $currentOrder > 0 ? 'Upgrade' : 'Subscribe' }} — $149/mo'">
                                 {{ $currentOrder < 3 && $currentOrder > 0 ? 'Upgrade' : 'Subscribe' }} — $149/mo
                             </span>
-                            <span x-show="loading" x-cloak style="display: flex; align-items: center; justify-content: center; gap: 6px;">
+                            <span x-show="loadingPlan === 'agency'" x-cloak style="display:flex;align-items:center;justify-content:center;gap:6px;">
                                 <svg style="width:14px;height:14px;animation:spin 1s linear infinite" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
                                 </svg>
