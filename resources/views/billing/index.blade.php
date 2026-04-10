@@ -61,7 +61,7 @@
                 @endif
             </div>
             @if($user->plan)
-                <form method="POST" action="/dashboard/billing/portal">
+                <form method="POST" action="/billing/portal">
                     @csrf
                     <button
                         type="submit"
@@ -146,7 +146,7 @@
                         Current Plan
                     </div>
                 @else
-                    <form method="POST" action="/dashboard/billing/subscribe">
+                    <form method="POST" action="/billing/subscribe">
                         @csrf
                         <input type="hidden" name="plan" value="indie">
                         <input type="hidden" name="billing_period" :value="annual ? 'annual' : 'monthly'">
@@ -208,7 +208,7 @@
                         Current Plan
                     </div>
                 @else
-                    <form method="POST" action="/dashboard/billing/subscribe">
+                    <form method="POST" action="/billing/subscribe">
                         @csrf
                         <input type="hidden" name="plan" value="studio">
                         <input type="hidden" name="billing_period" :value="annual ? 'annual' : 'monthly'">
@@ -264,7 +264,7 @@
                         Current Plan
                     </div>
                 @else
-                    <form method="POST" action="/dashboard/billing/subscribe">
+                    <form method="POST" action="/billing/subscribe">
                         @csrf
                         <input type="hidden" name="plan" value="agency">
                         <input type="hidden" name="billing_period" :value="annual ? 'annual' : 'monthly'">
