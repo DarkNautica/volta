@@ -75,92 +75,225 @@
         </div>
     </div>
 
+    <style>
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    </style>
+
     {{-- Plans --}}
     <div x-data="{ annual: false }">
-        {{-- Billing Toggle --}}
-        <div style="display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 2rem;">
-            <span class="text-sm" style="color: var(--muted);" :style="!annual ? 'color: var(--text)' : ''">Monthly</span>
+
+        {{-- Toggle --}}
+        <div style="display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 2.5rem;">
+            <span style="font-size: 14px; font-weight: 500; transition: color 0.2s;"
+                  :style="!annual ? 'color: #f0f0ff' : 'color: rgba(240,240,255,0.4)'">
+                Monthly
+            </span>
             <div @click="annual = !annual"
-                 style="width: 44px; height: 24px; border-radius: 12px; cursor: pointer; position: relative; transition: background 0.2s;"
-                 :style="annual ? 'background: var(--accent)' : 'background: rgba(255,255,255,0.15)'">
-                <div style="position: absolute; top: 3px; width: 18px; height: 18px; border-radius: 50%; background: white; transition: left 0.2s;"
-                     :style="annual ? 'left: 23px' : 'left: 3px'"></div>
+                 style="width: 48px; height: 26px; border-radius: 13px; cursor: pointer; position: relative; transition: background 0.25s; flex-shrink: 0;"
+                 :style="annual ? 'background: #00C2FF' : 'background: rgba(255,255,255,0.15)'">
+                <div style="position: absolute; top: 3px; width: 20px; height: 20px; border-radius: 50%; background: white; transition: left 0.25s; box-shadow: 0 1px 4px rgba(0,0,0,0.3);"
+                     :style="annual ? 'left: 25px' : 'left: 3px'">
+                </div>
             </div>
-            <span class="text-sm" style="color: var(--muted);" :style="annual ? 'color: var(--text)' : ''">Annual</span>
-            <span x-show="annual" x-cloak
-                  style="font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 100px; background: rgba(0,194,255,0.15); color: var(--accent); letter-spacing: 0.05em;">
-                SAVE 20%
+            <span style="font-size: 14px; font-weight: 500; transition: color 0.2s;"
+                  :style="annual ? 'color: #f0f0ff' : 'color: rgba(240,240,255,0.4)'">
+                Annual
+            </span>
+            <span x-show="annual" x-transition x-cloak
+                  style="font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 100px; background: rgba(0,194,255,0.15); color: #00C2FF; letter-spacing: 0.06em; text-transform: uppercase;">
+                Save 20%
             </span>
         </div>
 
-        @php
-            $annualPrices = [
-                'indie'  => ['monthly' => 19, 'annual' => 15, 'yearly' => 182],
-                'studio' => ['monthly' => 49, 'annual' => 39, 'yearly' => 468],
-                'agency' => ['monthly' => 149, 'annual' => 119, 'yearly' => 1428],
-            ];
-        @endphp
+        {{-- Plan cards grid --}}
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;">
+            @php $isCurrentIndie = $user->plan === 'indie'; @endphp
+            @php $isCurrentStudio = $user->plan === 'studio'; @endphp
+            @php $isCurrentAgency = $user->plan === 'agency'; @endphp
+            @php
+                $planOrder = ['indie' => 1, 'studio' => 2, 'agency' => 3];
+                $currentOrder = $planOrder[$user->plan] ?? 0;
+            @endphp
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-            @foreach($plans as $key => $plan)
-                <div class="rounded-xl p-8 flex flex-col" style="background-color: var(--surface); border: 1px solid {{ $user->plan === $key ? 'var(--accent)' : 'var(--border)' }};">
-                    <h3 class="text-2xl mb-2" style="color: var(--text);">{{ $plan['name'] }}</h3>
-
-                    <div class="mb-4">
-                        <span class="text-4xl font-bold" style="font-family: 'Bebas Neue', sans-serif; color: var(--accent);"
-                              x-text="annual ? '${{ $annualPrices[$key]['annual'] }}' : '${{ $annualPrices[$key]['monthly'] }}'">
-                            ${{ $annualPrices[$key]['monthly'] }}
-                        </span>
-                        <span class="text-sm" style="color: var(--muted);"
-                              x-text="annual ? '/mo, billed ${{ number_format($annualPrices[$key]['yearly']) }}/yr' : '/month'">
-                            /month
-                        </span>
-                    </div>
-
-                    <ul class="space-y-3 mb-8 flex-1">
-                        <li class="flex items-center gap-2 text-sm" style="color: var(--text);">
-                            <svg class="w-4 h-4 flex-shrink-0" style="color: var(--accent);" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                            {{ $plan['app_limit'] ? $plan['app_limit'] . ' app' . ($plan['app_limit'] > 1 ? 's' : '') : 'Unlimited apps' }}
-                        </li>
-                    </ul>
-
-                    @if($user->plan === $key)
-                        <div class="px-5 py-3 rounded-lg text-sm font-semibold text-center" style="background-color: var(--surface2); color: var(--muted); border: 1px solid var(--border);">
-                            Current Plan
-                        </div>
-                    @else
-                        @php
-                            $planOrder = ['indie' => 1, 'studio' => 2, 'agency' => 3];
-                            $currentOrder = $planOrder[$user->plan] ?? 0;
-                            $thisOrder = $planOrder[$key] ?? 0;
-                            $label = $currentOrder > 0 && $thisOrder < $currentOrder ? 'Downgrade' : ($currentOrder > 0 && $thisOrder > $currentOrder ? 'Upgrade' : 'Subscribe');
-                        @endphp
-                        <form method="POST" action="/dashboard/billing/subscribe" x-data="{ loading: false }" @submit="loading = true">
-                            @csrf
-                            <input type="hidden" name="plan" value="{{ $key }}">
-                            <input type="hidden" name="billing_period" :value="annual ? 'annual' : 'monthly'">
-                            <button
-                                type="submit"
-                                class="w-full px-5 py-3 rounded-lg text-sm font-semibold transition-all hover:opacity-90 flex items-center justify-center gap-2"
-                                style="background-color: var(--accent); color: var(--bg);"
-                                :disabled="loading"
-                                :style="loading && 'opacity: 0.6; cursor: not-allowed;'"
-                            >
-                                <svg x-show="loading" x-cloak class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
-                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
-                                </svg>
-                                <span x-show="!loading">{{ $label }}</span>
-                                <span x-show="loading" x-cloak>Redirecting to Stripe...</span>
-                            </button>
-                        </form>
-                    @endif
+            {{-- INDIE --}}
+            <div style="background: #0e0e1a; border: 1px solid {{ $isCurrentIndie ? '#00C2FF' : 'rgba(255,255,255,0.07)' }}; border-radius: 16px; padding: 2rem; display: flex; flex-direction: column;">
+                <div style="font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 2px; color: rgba(240,240,255,0.5); margin-bottom: 0.5rem;">INDIE</div>
+                <div style="margin-bottom: 1.5rem;">
+                    <span style="font-family: 'Bebas Neue', sans-serif; font-size: 52px; color: #f0f0ff; line-height: 1;"
+                          x-text="annual ? '$15' : '$19'">$19</span>
+                    <span style="font-size: 13px; color: rgba(240,240,255,0.5);"
+                          x-text="annual ? '/mo · billed $182/yr' : '/month'">/month</span>
                 </div>
-            @endforeach
-        </div>
-    </div>
+                <ul style="list-style: none; padding: 0; margin: 0 0 2rem 0; flex: 1;">
+                    <li style="font-size: 14px; color: rgba(240,240,255,0.6); padding: 5px 0; display: flex; align-items: center; gap: 8px;">
+                        <span style="color: #00C2FF;">&#10003;</span> 1 app
+                    </li>
+                    <li style="font-size: 14px; color: rgba(240,240,255,0.6); padding: 5px 0; display: flex; align-items: center; gap: 8px;">
+                        <span style="color: #00C2FF;">&#10003;</span> Unlimited end users
+                    </li>
+                    <li style="font-size: 14px; color: rgba(240,240,255,0.6); padding: 5px 0; display: flex; align-items: center; gap: 8px;">
+                        <span style="color: #00C2FF;">&#10003;</span> Full credit system
+                    </li>
+                    <li style="font-size: 14px; color: rgba(240,240,255,0.6); padding: 5px 0; display: flex; align-items: center; gap: 8px;">
+                        <span style="color: #00C2FF;">&#10003;</span> Usage dashboard
+                    </li>
+                    <li style="font-size: 14px; color: rgba(240,240,255,0.6); padding: 5px 0; display: flex; align-items: center; gap: 8px;">
+                        <span style="color: #00C2FF;">&#10003;</span> Community support
+                    </li>
+                </ul>
+                @if($isCurrentIndie)
+                    <div style="width: 100%; padding: 13px; border-radius: 8px; font-size: 14px; font-weight: 600; text-align: center; background: transparent; color: rgba(240,240,255,0.4); border: 1px solid rgba(255,255,255,0.1);">
+                        Current Plan
+                    </div>
+                @else
+                    <form method="POST" action="/dashboard/billing/subscribe">
+                        @csrf
+                        <input type="hidden" name="plan" value="indie">
+                        <input type="hidden" name="billing_period" :value="annual ? 'annual' : 'monthly'">
+                        <button type="submit"
+                                x-data="{ loading: false }"
+                                @click="loading = true"
+                                :disabled="loading"
+                                style="width: 100%; padding: 13px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; background: transparent; color: #f0f0ff; border: 1px solid rgba(255,255,255,0.15); transition: all 0.2s;"
+                                onmouseover="this.style.borderColor='#00C2FF'; this.style.color='#00C2FF';"
+                                onmouseout="this.style.borderColor='rgba(255,255,255,0.15)'; this.style.color='#f0f0ff';">
+                            <span x-show="!loading" x-text="annual ? '{{ $currentOrder > 1 ? 'Downgrade' : 'Subscribe' }} — $182/yr' : '{{ $currentOrder > 1 ? 'Downgrade' : 'Subscribe' }} — $19/mo'">
+                                {{ $currentOrder > 1 ? 'Downgrade' : 'Subscribe' }} — $19/mo
+                            </span>
+                            <span x-show="loading" x-cloak style="display: flex; align-items: center; justify-content: center; gap: 6px;">
+                                <svg style="width:14px;height:14px;animation:spin 1s linear infinite" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+                                </svg>
+                                Redirecting...
+                            </span>
+                        </button>
+                    </form>
+                @endif
+            </div>
 
-    <p class="mt-6 text-sm text-center" style="color: var(--muted);">
+            {{-- STUDIO (featured) --}}
+            <div style="background: #0e0e1a; border: 1px solid #00C2FF; border-radius: 16px; padding: 2rem; display: flex; flex-direction: column; position: relative; box-shadow: 0 -4px 24px rgba(0,194,255,0.12);">
+                <div style="position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: #00C2FF; color: #080810; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 14px; border-radius: 100px; white-space: nowrap;">
+                    Most popular
+                </div>
+                <div style="font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 2px; color: rgba(240,240,255,0.5); margin-bottom: 0.5rem;">STUDIO</div>
+                <div style="margin-bottom: 1.5rem;">
+                    <span style="font-family: 'Bebas Neue', sans-serif; font-size: 52px; color: #f0f0ff; line-height: 1;"
+                          x-text="annual ? '$39' : '$49'">$49</span>
+                    <span style="font-size: 13px; color: rgba(240,240,255,0.5);"
+                          x-text="annual ? '/mo · billed $468/yr' : '/month'">/month</span>
+                </div>
+                <ul style="list-style: none; padding: 0; margin: 0 0 2rem 0; flex: 1;">
+                    <li style="font-size: 14px; color: rgba(240,240,255,0.6); padding: 5px 0; display: flex; align-items: center; gap: 8px;">
+                        <span style="color: #00C2FF;">&#10003;</span> 5 apps
+                    </li>
+                    <li style="font-size: 14px; color: rgba(240,240,255,0.6); padding: 5px 0; display: flex; align-items: center; gap: 8px;">
+                        <span style="color: #00C2FF;">&#10003;</span> Unlimited end users
+                    </li>
+                    <li style="font-size: 14px; color: rgba(240,240,255,0.6); padding: 5px 0; display: flex; align-items: center; gap: 8px;">
+                        <span style="color: #00C2FF;">&#10003;</span> Everything in Indie
+                    </li>
+                    <li style="font-size: 14px; color: rgba(240,240,255,0.6); padding: 5px 0; display: flex; align-items: center; gap: 8px;">
+                        <span style="color: #00C2FF;">&#10003;</span> Multi-model pricing
+                    </li>
+                    <li style="font-size: 14px; color: rgba(240,240,255,0.6); padding: 5px 0; display: flex; align-items: center; gap: 8px;">
+                        <span style="color: #00C2FF;">&#10003;</span> Embeddable billing portal
+                    </li>
+                    <li style="font-size: 14px; color: rgba(240,240,255,0.6); padding: 5px 0; display: flex; align-items: center; gap: 8px;">
+                        <span style="color: #00C2FF;">&#10003;</span> Priority support
+                    </li>
+                </ul>
+                @if($isCurrentStudio)
+                    <div style="width: 100%; padding: 13px; border-radius: 8px; font-size: 14px; font-weight: 600; text-align: center; background: transparent; color: rgba(240,240,255,0.4); border: 1px solid rgba(255,255,255,0.1);">
+                        Current Plan
+                    </div>
+                @else
+                    <form method="POST" action="/dashboard/billing/subscribe">
+                        @csrf
+                        <input type="hidden" name="plan" value="studio">
+                        <input type="hidden" name="billing_period" :value="annual ? 'annual' : 'monthly'">
+                        <button type="submit"
+                                x-data="{ loading: false }"
+                                @click="loading = true"
+                                :disabled="loading"
+                                style="width: 100%; padding: 13px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; background: #00C2FF; color: #080810; border: none; transition: opacity 0.2s;"
+                                onmouseover="this.style.opacity='0.85'"
+                                onmouseout="this.style.opacity='1'">
+                            <span x-show="!loading" x-text="annual ? '{{ $currentOrder > 0 && $currentOrder !== 2 ? ($currentOrder > 2 ? 'Downgrade' : 'Upgrade') : 'Subscribe' }} — $468/yr' : '{{ $currentOrder > 0 && $currentOrder !== 2 ? ($currentOrder > 2 ? 'Downgrade' : 'Upgrade') : 'Subscribe' }} — $49/mo'">
+                                {{ $currentOrder > 0 && $currentOrder !== 2 ? ($currentOrder > 2 ? 'Downgrade' : 'Upgrade') : 'Subscribe' }} — $49/mo
+                            </span>
+                            <span x-show="loading" x-cloak style="display: flex; align-items: center; justify-content: center; gap: 6px;">
+                                <svg style="width:14px;height:14px;animation:spin 1s linear infinite" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+                                </svg>
+                                Redirecting...
+                            </span>
+                        </button>
+                    </form>
+                @endif
+            </div>
+
+            {{-- AGENCY --}}
+            <div style="background: #0e0e1a; border: 1px solid {{ $isCurrentAgency ? '#00C2FF' : 'rgba(255,255,255,0.07)' }}; border-radius: 16px; padding: 2rem; display: flex; flex-direction: column;">
+                <div style="font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 2px; color: rgba(240,240,255,0.5); margin-bottom: 0.5rem;">AGENCY</div>
+                <div style="margin-bottom: 1.5rem;">
+                    <span style="font-family: 'Bebas Neue', sans-serif; font-size: 52px; color: #f0f0ff; line-height: 1;"
+                          x-text="annual ? '$119' : '$149'">$149</span>
+                    <span style="font-size: 13px; color: rgba(240,240,255,0.5);"
+                          x-text="annual ? '/mo · billed $1,428/yr' : '/month'">/month</span>
+                </div>
+                <ul style="list-style: none; padding: 0; margin: 0 0 2rem 0; flex: 1;">
+                    <li style="font-size: 14px; color: rgba(240,240,255,0.6); padding: 5px 0; display: flex; align-items: center; gap: 8px;">
+                        <span style="color: #00C2FF;">&#10003;</span> Unlimited apps
+                    </li>
+                    <li style="font-size: 14px; color: rgba(240,240,255,0.6); padding: 5px 0; display: flex; align-items: center; gap: 8px;">
+                        <span style="color: #00C2FF;">&#10003;</span> Unlimited end users
+                    </li>
+                    <li style="font-size: 14px; color: rgba(240,240,255,0.6); padding: 5px 0; display: flex; align-items: center; gap: 8px;">
+                        <span style="color: #00C2FF;">&#10003;</span> Everything in Studio
+                    </li>
+                    <li style="font-size: 14px; color: rgba(240,240,255,0.6); padding: 5px 0; display: flex; align-items: center; gap: 8px;">
+                        <span style="color: #00C2FF;">&#10003;</span> White-label portal
+                    </li>
+                    <li style="font-size: 14px; color: rgba(240,240,255,0.6); padding: 5px 0; display: flex; align-items: center; gap: 8px;">
+                        <span style="color: #00C2FF;">&#10003;</span> Dedicated support
+                    </li>
+                </ul>
+                @if($isCurrentAgency)
+                    <div style="width: 100%; padding: 13px; border-radius: 8px; font-size: 14px; font-weight: 600; text-align: center; background: transparent; color: rgba(240,240,255,0.4); border: 1px solid rgba(255,255,255,0.1);">
+                        Current Plan
+                    </div>
+                @else
+                    <form method="POST" action="/dashboard/billing/subscribe">
+                        @csrf
+                        <input type="hidden" name="plan" value="agency">
+                        <input type="hidden" name="billing_period" :value="annual ? 'annual' : 'monthly'">
+                        <button type="submit"
+                                x-data="{ loading: false }"
+                                @click="loading = true"
+                                :disabled="loading"
+                                style="width: 100%; padding: 13px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; background: transparent; color: #f0f0ff; border: 1px solid rgba(255,255,255,0.15); transition: all 0.2s;"
+                                onmouseover="this.style.borderColor='#00C2FF'; this.style.color='#00C2FF';"
+                                onmouseout="this.style.borderColor='rgba(255,255,255,0.15)'; this.style.color='#f0f0ff';">
+                            <span x-show="!loading" x-text="annual ? '{{ $currentOrder < 3 && $currentOrder > 0 ? 'Upgrade' : 'Subscribe' }} — $1,428/yr' : '{{ $currentOrder < 3 && $currentOrder > 0 ? 'Upgrade' : 'Subscribe' }} — $149/mo'">
+                                {{ $currentOrder < 3 && $currentOrder > 0 ? 'Upgrade' : 'Subscribe' }} — $149/mo
+                            </span>
+                            <span x-show="loading" x-cloak style="display: flex; align-items: center; justify-content: center; gap: 6px;">
+                                <svg style="width:14px;height:14px;animation:spin 1s linear infinite" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+                                </svg>
+                                Redirecting...
+                            </span>
+                        </button>
+                    </form>
+                @endif
+            </div>
+
+        </div>{{-- end grid --}}
+
+    </div>{{-- end x-data --}}
+
+    <p style="margin-top: 1.5rem; font-size: 14px; text-align: center; color: rgba(240,240,255,0.4);">
         Upgrading takes effect immediately. Downgrading takes effect at the end of your billing period.
     </p>
 @endsection
