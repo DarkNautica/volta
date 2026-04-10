@@ -33,13 +33,117 @@
             background-color: var(--bg);
             color: var(--text);
             margin: 0;
+            opacity: 0;
+            animation: pageFadeIn 0.3s ease forwards;
+        }
+
+        @keyframes pageFadeIn {
+            to { opacity: 1; }
         }
 
         .font-display {
             font-family: 'Bebas Neue', sans-serif;
         }
 
-        /* Code block syntax highlighting */
+        /* ===== NAV ===== */
+        .nav-bar {
+            background: transparent;
+            border-bottom: 1px solid transparent;
+            transition: background 0.3s, border-color 0.3s;
+        }
+        .nav-bar.scrolled {
+            background: rgba(8,8,16,0.92);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom-color: rgba(255,255,255,0.07);
+        }
+
+        .nav-link {
+            position: relative;
+            transition: color 0.2s;
+        }
+        .nav-link.active {
+            color: var(--accent) !important;
+        }
+
+        /* CTA pulse */
+        @keyframes ctaPulse {
+            0% { box-shadow: 0 0 0 0 rgba(0,194,255,0.5); }
+            70% { box-shadow: 0 0 0 12px rgba(0,194,255,0); }
+            100% { box-shadow: 0 0 0 0 rgba(0,194,255,0); }
+        }
+        .cta-pulse {
+            animation: ctaPulse 0.8s ease-out 0.5s 1;
+        }
+
+        /* ===== HERO ===== */
+        /* Typewriter */
+        @keyframes typewriter {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+        @keyframes blinkCaret {
+            0%, 100% { border-color: var(--accent); }
+            50% { border-color: transparent; }
+        }
+        .typewriter-wrapper {
+            display: inline-block;
+            position: relative;
+        }
+        .typewriter-text {
+            display: inline-block;
+            overflow: hidden;
+            white-space: nowrap;
+            width: 0;
+            border-right: 3px solid var(--accent);
+            animation: typewriter 0.6s steps(8) 0.3s forwards, blinkCaret 0.5s step-end 0.3s 3;
+        }
+
+        /* Hero glow */
+        .hero-glow {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0,194,255,0.08) 0%, transparent 70%);
+            pointer-events: none;
+            animation: drift 8s ease-in-out infinite;
+            top: -100px;
+            right: -100px;
+        }
+        @keyframes drift {
+            0%   { transform: translate(0, 0); }
+            50%  { transform: translate(30px, -20px); }
+            100% { transform: translate(0, 0); }
+        }
+
+        /* Hero buttons */
+        .hero-btn-primary {
+            transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s;
+        }
+        .hero-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0,194,255,0.25);
+        }
+        .hero-btn-ghost {
+            transition: border-color 0.2s ease, background 0.2s ease;
+        }
+        .hero-btn-ghost:hover {
+            border-color: var(--accent) !important;
+            background: rgba(255,255,255,0.03);
+        }
+
+        /* Scroll indicator */
+        @keyframes bounce-down {
+            0%, 100% { transform: translateY(0); opacity: 0.6; }
+            50% { transform: translateY(8px); opacity: 1; }
+        }
+        .scroll-indicator {
+            animation: bounce-down 2s ease-in-out infinite;
+            transition: opacity 0.3s;
+        }
+
+        /* Code block */
         .code-block {
             background: #06060e;
             border: 1px solid var(--border);
@@ -60,15 +164,35 @@
         .code-block .dot-red { background: #ff5f57; }
         .code-block .dot-yellow { background: #ffbd2e; }
         .code-block .dot-green { background: #28c840; }
+        .code-tab {
+            padding: 8px 16px;
+            font-size: 12px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: color 0.2s, border-color 0.2s;
+            color: var(--muted);
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+        }
+        .code-tab:hover { color: var(--text); }
+        .code-tab.active {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+        }
         .code-block pre {
             padding: 24px;
             margin: 0;
             font-size: 14px;
             line-height: 1.8;
             overflow-x: auto;
+            min-height: 110px;
         }
         .code-block code {
             font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+        }
+        .code-fade-enter { animation: codeFadeIn 0.15s ease forwards; }
+        @keyframes codeFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
         .syn-class { color: #00C2FF; }
         .syn-method { color: #c792ea; }
@@ -76,46 +200,186 @@
         .syn-var { color: #f78c6c; }
         .syn-semi { color: rgba(240,240,255,0.3); }
         .syn-scope { color: #89ddff; }
+        .syn-comment { color: rgba(240,240,255,0.3); font-style: italic; }
+        .syn-string { color: #c3e88d; }
+        .syn-keyword { color: #c792ea; }
+        .syn-num { color: #f78c6c; }
 
-        /* Card hover */
+        /* ===== METRICS ===== */
+        .metrics-line {
+            height: 2px;
+            background: var(--accent);
+            transform-origin: left;
+            transform: scaleX(0);
+            transition: transform 1.2s ease-out;
+        }
+        .metrics-line.animate { transform: scaleX(1); }
+
+        /* ===== FEATURE CARDS ===== */
         .feature-card {
-            transition: border-color 0.2s ease, transform 0.2s ease;
+            transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
         }
         .feature-card:hover {
             border-color: rgba(0,194,255,0.2) !important;
             transform: translateY(-2px);
+            box-shadow: 0 0 0 1px rgba(0,194,255,0.15), 0 8px 32px rgba(0,194,255,0.06);
+        }
+        .feature-icon {
+            transition: background 0.3s ease;
+        }
+        .feature-card:hover .feature-icon {
+            animation: iconPulse 0.4s ease;
+        }
+        @keyframes iconPulse {
+            0% { background: rgba(0,194,255,0.1); }
+            50% { background: rgba(0,194,255,0.2); }
+            100% { background: rgba(0,194,255,0.1); }
         }
 
-        /* Pricing card highlight */
+        /* Scroll reveal */
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+        }
+        .scroll-reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ===== HOW IT WORKS stepper ===== */
+        .stepper-line {
+            position: absolute;
+            top: 24px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--border);
+        }
+        .stepper-line-fill {
+            position: absolute;
+            top: 24px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 1.2s ease-out;
+        }
+        .stepper-line-fill.animate {
+            width: 100%;
+        }
+
+        /* Mobile vertical line */
+        @media (max-width: 767px) {
+            .stepper-line, .stepper-line-fill { display: none; }
+            .mobile-vertical-line {
+                position: absolute;
+                left: 24px;
+                top: 48px;
+                bottom: 0;
+                width: 2px;
+                background: var(--border);
+            }
+            .mobile-vertical-line-fill {
+                position: absolute;
+                left: 24px;
+                top: 48px;
+                width: 2px;
+                height: 0;
+                background: var(--accent);
+                transition: height 1.2s ease-out;
+            }
+            .mobile-vertical-line-fill.animate {
+                height: calc(100% - 48px);
+            }
+        }
+        @media (min-width: 768px) {
+            .mobile-vertical-line, .mobile-vertical-line-fill { display: none; }
+        }
+
+        /* ===== PRICING ===== */
         .pricing-highlight {
             border-color: var(--accent) !important;
-            box-shadow: 0 0 40px rgba(0,194,255,0.08);
+            box-shadow: 0 -4px 24px rgba(0,194,255,0.15), 0 0 40px rgba(0,194,255,0.08);
+        }
+
+        .toggle-switch {
+            width: 48px;
+            height: 26px;
+            border-radius: 13px;
+            background: rgba(255,255,255,0.1);
+            position: relative;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .toggle-switch.active {
+            background: var(--accent);
+        }
+        .toggle-switch .toggle-dot {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: white;
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            transition: transform 0.2s;
+        }
+        .toggle-switch.active .toggle-dot {
+            transform: translateX(22px);
+        }
+
+        .price-fade {
+            transition: opacity 0.15s ease;
+        }
+
+        /* ===== CTA SECTION ===== */
+        @keyframes grid-scroll {
+            from { background-position: 0 0; }
+            to { background-position: 40px 40px; }
+        }
+        .cta-grid-bg {
+            background-image:
+                linear-gradient(rgba(0,194,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,194,255,0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            animation: grid-scroll 4s linear infinite;
         }
 
         /* Smooth scrolling */
         html { scroll-behavior: smooth; }
 
-        /* Step connector line */
-        .step-connector {
-            position: absolute;
-            top: 24px;
-            left: 48px;
-            right: -48px;
-            height: 2px;
-            background: var(--border);
-        }
-
-        @media (max-width: 768px) {
-            .step-connector {
-                display: none;
+        /* Reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
             }
         }
     </style>
 </head>
-<body class="antialiased" x-data="{ mobileMenu: false }">
+<body class="antialiased"
+      x-data="{
+          mobileMenu: false,
+          scrolled: false,
+          activeSection: '',
+          heroVisible: true
+      }"
+      @scroll.window="
+          scrolled = window.scrollY > 60;
+          heroVisible = window.scrollY < 600;
+          let sections = ['features', 'how-it-works', 'pricing'];
+          let current = '';
+          sections.forEach(id => {
+              let el = document.getElementById(id);
+              if (el && el.getBoundingClientRect().top < 200) current = id;
+          });
+          activeSection = current;
+      ">
 
     <!-- ===== NAV ===== -->
-    <nav class="fixed top-0 left-0 right-0 z-50 backdrop-blur-md" style="background: rgba(8,8,16,0.85); border-bottom: 1px solid var(--border);">
+    <nav class="fixed top-0 left-0 right-0 z-50 nav-bar" :class="{ 'scrolled': scrolled }">
         <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
             <!-- Logo -->
             <a href="#" class="font-display text-2xl tracking-wider" style="color: var(--text);">
@@ -124,11 +388,11 @@
 
             <!-- Desktop Links -->
             <div class="hidden md:flex items-center gap-8">
-                <a href="#features" class="text-sm hover:opacity-100 transition-opacity" style="color: var(--muted);">Features</a>
-                <a href="#how-it-works" class="text-sm hover:opacity-100 transition-opacity" style="color: var(--muted);">How it works</a>
-                <a href="#pricing" class="text-sm hover:opacity-100 transition-opacity" style="color: var(--muted);">Pricing</a>
-                <a href="/docs" class="text-sm hover:opacity-100 transition-opacity" style="color: var(--muted);">Docs</a>
-                <a href="/register" class="text-sm font-semibold px-5 py-2 rounded-lg transition-opacity hover:opacity-90" style="background: var(--accent); color: #080810;">
+                <a href="#features" class="nav-link text-sm hover:opacity-100 transition-opacity" :class="{ 'active': activeSection === 'features' }" style="color: var(--muted);">Features</a>
+                <a href="#how-it-works" class="nav-link text-sm hover:opacity-100 transition-opacity" :class="{ 'active': activeSection === 'how-it-works' }" style="color: var(--muted);">How it works</a>
+                <a href="#pricing" class="nav-link text-sm hover:opacity-100 transition-opacity" :class="{ 'active': activeSection === 'pricing' }" style="color: var(--muted);">Pricing</a>
+                <a href="/docs" class="nav-link text-sm hover:opacity-100 transition-opacity" style="color: var(--muted);">Docs</a>
+                <a href="/register" class="cta-pulse text-sm font-semibold px-5 py-2 rounded-lg transition-opacity hover:opacity-90" style="background: var(--accent); color: #080810;">
                     Start $7 trial
                 </a>
             </div>
@@ -151,60 +415,90 @@
     </nav>
 
     <!-- ===== HERO ===== -->
-    <section class="pt-32 pb-20 md:pt-44 md:pb-28 px-6">
-        <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+    <section class="relative pt-32 pb-20 md:pt-44 md:pb-28 px-6 overflow-hidden">
+        <div class="hero-glow"></div>
+        <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center relative z-10">
             <!-- Left -->
             <div>
                 <h1 class="font-display text-5xl md:text-7xl lg:text-8xl leading-none tracking-wide mb-6" style="color: var(--text);">
-                    AI BILLING,<br><span style="color: var(--accent);">HANDLED.</span>
+                    AI BILLING,<br>
+                    <span class="typewriter-wrapper" style="color: var(--accent);">
+                        <span class="typewriter-text">HANDLED.</span>
+                    </span>
                 </h1>
                 <p class="text-lg md:text-xl leading-relaxed mb-8 max-w-lg" style="color: var(--muted);">
                     Drop-in billing infrastructure for AI apps. Charge per token, per request, or per feature &mdash; in three lines of code.
                 </p>
                 <div class="flex flex-wrap gap-4">
-                    <a href="/register" class="inline-block text-sm font-semibold px-7 py-3 rounded-lg transition-opacity hover:opacity-90" style="background: var(--accent); color: #080810;">
+                    <a href="/register" class="hero-btn-primary inline-block text-sm font-semibold px-7 py-3 rounded-lg" style="background: var(--accent); color: #080810;">
                         Start $7 trial
                     </a>
-                    <a href="/docs" class="inline-block text-sm font-semibold px-7 py-3 rounded-lg border transition-colors hover:bg-white/5" style="border-color: var(--border); color: var(--text);">
+                    <a href="/docs" class="hero-btn-ghost inline-block text-sm font-semibold px-7 py-3 rounded-lg border" style="border-color: var(--border); color: var(--text);">
                         View docs
                     </a>
                 </div>
             </div>
 
-            <!-- Right: Code Block -->
-            <div class="code-block">
+            <!-- Right: Code Block with Tabs -->
+            <div class="code-block" x-data="{ tab: 'charge' }">
                 <div class="titlebar">
                     <div class="dot dot-red"></div>
                     <div class="dot dot-yellow"></div>
                     <div class="dot dot-green"></div>
-                    <span class="ml-2 text-xs" style="color: var(--muted);">app/Http/Controllers/AiController.php</span>
                 </div>
-                <pre><code><span class="syn-class">Volta</span><span class="syn-scope">::</span><span class="syn-method">charge</span><span class="syn-paren">(</span><span class="syn-var">$userId</span><span class="syn-paren">)</span><span class="syn-semi">;</span>
-
-<span class="syn-class">Volta</span><span class="syn-scope">::</span><span class="syn-method">hasAccess</span><span class="syn-paren">(</span><span class="syn-var">$userId</span><span class="syn-paren">)</span><span class="syn-semi">;</span>
-
-<span class="syn-class">Volta</span><span class="syn-scope">::</span><span class="syn-method">balance</span><span class="syn-paren">(</span><span class="syn-var">$userId</span><span class="syn-paren">)</span><span class="syn-semi">;</span></code></pre>
+                <div class="flex border-b" style="border-color: var(--border);">
+                    <button class="code-tab" :class="{ 'active': tab === 'charge' }" @click="tab = 'charge'">charge.php</button>
+                    <button class="code-tab" :class="{ 'active': tab === 'hasAccess' }" @click="tab = 'hasAccess'">hasAccess.php</button>
+                    <button class="code-tab" :class="{ 'active': tab === 'balance' }" @click="tab = 'balance'">balance.php</button>
+                </div>
+                <pre><code><template x-if="tab === 'charge'"><span class="code-fade-enter"><span class="syn-comment">// Deduct credits after successful AI call</span>
+<span class="syn-class">Volta</span><span class="syn-scope">::</span><span class="syn-method">charge</span><span class="syn-paren">(</span><span class="syn-var">$userId</span><span class="syn-paren">,</span> <span class="syn-num">1</span><span class="syn-paren">,</span> <span class="syn-string">'claude-3-5-sonnet'</span><span class="syn-paren">)</span><span class="syn-semi">;</span></span></template><template x-if="tab === 'hasAccess'"><span class="code-fade-enter"><span class="syn-comment">// Check before calling AI</span>
+<span class="syn-keyword">if</span> <span class="syn-paren">(!</span><span class="syn-class">Volta</span><span class="syn-scope">::</span><span class="syn-method">hasAccess</span><span class="syn-paren">(</span><span class="syn-var">$userId</span><span class="syn-paren">,</span> <span class="syn-num">2</span><span class="syn-paren">))</span> <span class="syn-paren">{</span>
+    <span class="syn-keyword">return</span> <span class="syn-method">response</span><span class="syn-paren">()</span><span class="syn-scope">-></span><span class="syn-method">json</span><span class="syn-paren">([</span><span class="syn-string">'error'</span> <span class="syn-scope">=></span> <span class="syn-string">'insufficient_credits'</span><span class="syn-paren">],</span> <span class="syn-num">402</span><span class="syn-paren">)</span><span class="syn-semi">;</span>
+<span class="syn-paren">}</span></span></template><template x-if="tab === 'balance'"><span class="code-fade-enter"><span class="syn-comment">// Display in your UI</span>
+<span class="syn-var">$balance</span> <span class="syn-scope">=</span> <span class="syn-class">Volta</span><span class="syn-scope">::</span><span class="syn-method">balance</span><span class="syn-paren">(</span><span class="syn-var">$userId</span><span class="syn-paren">)</span><span class="syn-semi">;</span> <span class="syn-comment">// &rarr; 142</span></span></template></code></pre>
             </div>
+        </div>
+
+        <!-- Scroll indicator -->
+        <div class="flex justify-center mt-12 md:mt-16 scroll-indicator" :style="heroVisible ? 'opacity:1' : 'opacity:0; pointer-events:none'">
+            <svg class="w-6 h-6" style="color: var(--muted);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+            </svg>
         </div>
     </section>
 
     <!-- ===== METRICS BAR ===== -->
-    <section class="py-12 px-6" style="background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+    <section class="relative py-12 px-6" style="background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);"
+             x-data="{ shown: false }"
+             x-intersect:enter.once="shown = true">
+        <div class="metrics-line absolute top-0 left-0 right-0" :class="{ 'animate': shown }"></div>
         <div class="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             <div>
-                <div class="font-display text-4xl md:text-5xl mb-2" style="color: var(--accent);">3</div>
+                <div class="font-display text-4xl md:text-5xl mb-2" style="color: var(--accent);"
+                     x-text="shown ? Math.min(Math.round($el._counter || 0), 3) : '0'"
+                     x-effect="if (shown && !$el._started) { $el._started = true; let start = performance.now(); let animate = (now) => { let t = Math.min((now - start) / 600, 1); $el._counter = Math.round(3 * t); $el.textContent = Math.round(3 * t); if (t < 1) requestAnimationFrame(animate); }; requestAnimationFrame(animate); }">0</div>
                 <div class="text-sm" style="color: var(--muted);">Lines to integrate</div>
             </div>
             <div>
-                <div class="font-display text-4xl md:text-5xl mb-2" style="color: var(--accent);">100%</div>
+                <div class="font-display text-4xl md:text-5xl mb-2" style="color: var(--accent);"
+                     x-data="{ val: 0 }"
+                     x-effect="if (shown && val === 0) { let start = performance.now(); let animate = (now) => { let t = Math.min((now - start) / 1200, 1); val = Math.round(100 * t); if (t < 1) requestAnimationFrame(animate); }; requestAnimationFrame(animate); }"
+                     x-text="val + '%'">0%</div>
                 <div class="text-sm" style="color: var(--muted);">Revenue to you</div>
             </div>
             <div>
-                <div class="font-display text-4xl md:text-5xl mb-2" style="color: var(--accent);">0%</div>
+                <div class="font-display text-4xl md:text-5xl mb-2" style="color: var(--accent);"
+                     x-data="{ val: 0 }"
+                     x-effect="if (shown && val === 0) { val = 0; }"
+                     x-text="val + '%'">0%</div>
                 <div class="text-sm" style="color: var(--muted);">Cut taken</div>
             </div>
             <div>
-                <div class="font-display text-4xl md:text-5xl mb-2" style="color: var(--accent);">&infin;</div>
+                <div class="font-display text-4xl md:text-5xl mb-2" style="color: var(--accent);"
+                     x-data="{ visible: false }"
+                     x-effect="if (shown) { setTimeout(() => visible = true, 400) }"
+                     :style="visible ? 'opacity:1; transition: opacity 0.4s' : 'opacity:0'">&infin;</div>
                 <div class="text-sm" style="color: var(--muted);">End users</div>
             </div>
         </div>
@@ -218,10 +512,12 @@
                 <p class="text-lg max-w-xl mx-auto" style="color: var(--muted);">Built for developers shipping AI products. No billing headaches.</p>
             </div>
 
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
+                 x-data="{ shown: false }"
+                 x-intersect:enter.once="shown = true">
                 <!-- Card 1 -->
-                <div class="feature-card rounded-xl p-6" style="background: var(--surface); border: 1px solid var(--border);">
-                    <div class="w-10 h-10 rounded-lg flex items-center justify-center mb-4 text-lg font-bold" style="background: rgba(0,194,255,0.1); color: var(--accent);">
+                <div class="feature-card scroll-reveal rounded-xl p-6" :class="{ 'visible': shown }" :style="'transition-delay: 0ms'" style="background: var(--surface); border: 1px solid var(--border);">
+                    <div class="feature-icon w-10 h-10 rounded-lg flex items-center justify-center mb-4 text-lg font-bold" style="background: rgba(0,194,255,0.1); color: var(--accent);">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                     </div>
                     <h3 class="font-semibold text-lg mb-2" style="color: var(--text);">Credit System</h3>
@@ -229,8 +525,8 @@
                 </div>
 
                 <!-- Card 2 -->
-                <div class="feature-card rounded-xl p-6" style="background: var(--surface); border: 1px solid var(--border);">
-                    <div class="w-10 h-10 rounded-lg flex items-center justify-center mb-4 text-lg font-bold" style="background: rgba(0,194,255,0.1); color: var(--accent);">
+                <div class="feature-card scroll-reveal rounded-xl p-6" :class="{ 'visible': shown }" :style="'transition-delay: 100ms'" style="background: var(--surface); border: 1px solid var(--border);">
+                    <div class="feature-icon w-10 h-10 rounded-lg flex items-center justify-center mb-4 text-lg font-bold" style="background: rgba(0,194,255,0.1); color: var(--accent);">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                     </div>
                     <h3 class="font-semibold text-lg mb-2" style="color: var(--text);">Stripe Zero Config</h3>
@@ -238,8 +534,8 @@
                 </div>
 
                 <!-- Card 3 -->
-                <div class="feature-card rounded-xl p-6" style="background: var(--surface); border: 1px solid var(--border);">
-                    <div class="w-10 h-10 rounded-lg flex items-center justify-center mb-4 text-lg font-bold" style="background: rgba(0,194,255,0.1); color: var(--accent);">
+                <div class="feature-card scroll-reveal rounded-xl p-6" :class="{ 'visible': shown }" :style="'transition-delay: 200ms'" style="background: var(--surface); border: 1px solid var(--border);">
+                    <div class="feature-icon w-10 h-10 rounded-lg flex items-center justify-center mb-4 text-lg font-bold" style="background: rgba(0,194,255,0.1); color: var(--accent);">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
                     </div>
                     <h3 class="font-semibold text-lg mb-2" style="color: var(--text);">Rate Limiting</h3>
@@ -247,8 +543,8 @@
                 </div>
 
                 <!-- Card 4 -->
-                <div class="feature-card rounded-xl p-6" style="background: var(--surface); border: 1px solid var(--border);">
-                    <div class="w-10 h-10 rounded-lg flex items-center justify-center mb-4 text-lg font-bold" style="background: rgba(0,194,255,0.1); color: var(--accent);">
+                <div class="feature-card scroll-reveal rounded-xl p-6" :class="{ 'visible': shown }" :style="'transition-delay: 300ms'" style="background: var(--surface); border: 1px solid var(--border);">
+                    <div class="feature-icon w-10 h-10 rounded-lg flex items-center justify-center mb-4 text-lg font-bold" style="background: rgba(0,194,255,0.1); color: var(--accent);">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
                     </div>
                     <h3 class="font-semibold text-lg mb-2" style="color: var(--text);">Usage Dashboard</h3>
@@ -256,8 +552,8 @@
                 </div>
 
                 <!-- Card 5 -->
-                <div class="feature-card rounded-xl p-6" style="background: var(--surface); border: 1px solid var(--border);">
-                    <div class="w-10 h-10 rounded-lg flex items-center justify-center mb-4 text-lg font-bold" style="background: rgba(0,194,255,0.1); color: var(--accent);">
+                <div class="feature-card scroll-reveal rounded-xl p-6" :class="{ 'visible': shown }" :style="'transition-delay: 400ms'" style="background: var(--surface); border: 1px solid var(--border);">
+                    <div class="feature-icon w-10 h-10 rounded-lg flex items-center justify-center mb-4 text-lg font-bold" style="background: rgba(0,194,255,0.1); color: var(--accent);">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/></svg>
                     </div>
                     <h3 class="font-semibold text-lg mb-2" style="color: var(--text);">Multi-Model Pricing</h3>
@@ -265,8 +561,8 @@
                 </div>
 
                 <!-- Card 6 -->
-                <div class="feature-card rounded-xl p-6" style="background: var(--surface); border: 1px solid var(--border);">
-                    <div class="w-10 h-10 rounded-lg flex items-center justify-center mb-4 text-lg font-bold" style="background: rgba(0,194,255,0.1); color: var(--accent);">
+                <div class="feature-card scroll-reveal rounded-xl p-6" :class="{ 'visible': shown }" :style="'transition-delay: 500ms'" style="background: var(--surface); border: 1px solid var(--border);">
+                    <div class="feature-icon w-10 h-10 rounded-lg flex items-center justify-center mb-4 text-lg font-bold" style="background: rgba(0,194,255,0.1); color: var(--accent);">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"/></svg>
                     </div>
                     <h3 class="font-semibold text-lg mb-2" style="color: var(--text);">Embeddable Billing Portal</h3>
@@ -284,36 +580,53 @@
                 <p class="text-lg max-w-xl mx-auto" style="color: var(--muted);">From zero to billing in under five minutes.</p>
             </div>
 
-            <div class="grid md:grid-cols-4 gap-8 md:gap-6">
-                <!-- Step 1 -->
-                <div class="relative text-center md:text-left">
-                    <div class="hidden md:block step-connector"></div>
-                    <div class="w-12 h-12 rounded-full flex items-center justify-center mx-auto md:mx-0 mb-4 font-display text-xl" style="background: var(--accent); color: #080810;">1</div>
-                    <h3 class="font-semibold text-lg mb-2" style="color: var(--text);">Create App</h3>
-                    <p class="text-sm leading-relaxed" style="color: var(--muted);">Sign up and create a new app in the Volta dashboard. Get your API key in seconds.</p>
-                </div>
+            <div class="relative"
+                 x-data="{ shown: false }"
+                 x-intersect:enter.once="shown = true">
+                <!-- Desktop horizontal line -->
+                <div class="hidden md:block stepper-line"></div>
+                <div class="hidden md:block stepper-line-fill" :class="{ 'animate': shown }"></div>
 
-                <!-- Step 2 -->
-                <div class="relative text-center md:text-left">
-                    <div class="hidden md:block step-connector"></div>
-                    <div class="w-12 h-12 rounded-full flex items-center justify-center mx-auto md:mx-0 mb-4 font-display text-xl" style="background: var(--accent); color: #080810;">2</div>
-                    <h3 class="font-semibold text-lg mb-2" style="color: var(--text);">Install Package</h3>
-                    <p class="text-sm leading-relaxed" style="color: var(--muted);">Run <code class="px-1.5 py-0.5 rounded text-xs" style="background: rgba(0,194,255,0.1); color: var(--accent);">composer require darknautica/volta-php</code> and add your key to .env.</p>
-                </div>
+                <!-- Mobile vertical line -->
+                <div class="md:hidden mobile-vertical-line"></div>
+                <div class="md:hidden mobile-vertical-line-fill" :class="{ 'animate': shown }"></div>
 
-                <!-- Step 3 -->
-                <div class="relative text-center md:text-left">
-                    <div class="hidden md:block step-connector"></div>
-                    <div class="w-12 h-12 rounded-full flex items-center justify-center mx-auto md:mx-0 mb-4 font-display text-xl" style="background: var(--accent); color: #080810;">3</div>
-                    <h3 class="font-semibold text-lg mb-2" style="color: var(--text);">Wrap AI Calls</h3>
-                    <p class="text-sm leading-relaxed" style="color: var(--muted);">Wrap your AI API calls with <code class="px-1.5 py-0.5 rounded text-xs" style="background: rgba(0,194,255,0.1); color: var(--accent);">Volta::charge()</code> to bill per request.</p>
-                </div>
+                <div class="grid md:grid-cols-4 gap-8 md:gap-6">
+                    <!-- Step 1 -->
+                    <div class="relative scroll-reveal md:text-left flex md:block items-start gap-4" :class="{ 'visible': shown }" :style="'transition-delay: 0ms'">
+                        <div class="w-12 h-12 rounded-full flex items-center justify-center shrink-0 md:mb-4 font-display text-xl" style="background: var(--accent); color: #080810;">1</div>
+                        <div>
+                            <h3 class="font-semibold text-lg mb-2" style="color: var(--text);">Create App</h3>
+                            <p class="text-sm leading-relaxed" style="color: var(--muted);">Sign up and create a new app in the Volta dashboard. Get your API key in seconds.</p>
+                        </div>
+                    </div>
 
-                <!-- Step 4 -->
-                <div class="relative text-center md:text-left">
-                    <div class="w-12 h-12 rounded-full flex items-center justify-center mx-auto md:mx-0 mb-4 font-display text-xl" style="background: var(--accent); color: #080810;">4</div>
-                    <h3 class="font-semibold text-lg mb-2" style="color: var(--text);">Connect Stripe</h3>
-                    <p class="text-sm leading-relaxed" style="color: var(--muted);">Link your Stripe account. Volta syncs plans, handles webhooks, and starts collecting payments.</p>
+                    <!-- Step 2 -->
+                    <div class="relative scroll-reveal md:text-left flex md:block items-start gap-4" :class="{ 'visible': shown }" :style="'transition-delay: 150ms'">
+                        <div class="w-12 h-12 rounded-full flex items-center justify-center shrink-0 md:mb-4 font-display text-xl" style="background: var(--accent); color: #080810;">2</div>
+                        <div>
+                            <h3 class="font-semibold text-lg mb-2" style="color: var(--text);">Install Package</h3>
+                            <p class="text-sm leading-relaxed" style="color: var(--muted);">Run <code class="px-1.5 py-0.5 rounded text-xs" style="background: rgba(0,194,255,0.1); color: var(--accent);">composer require darknautica/volta-php</code> and add your key to .env.</p>
+                        </div>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="relative scroll-reveal md:text-left flex md:block items-start gap-4" :class="{ 'visible': shown }" :style="'transition-delay: 300ms'">
+                        <div class="w-12 h-12 rounded-full flex items-center justify-center shrink-0 md:mb-4 font-display text-xl" style="background: var(--accent); color: #080810;">3</div>
+                        <div>
+                            <h3 class="font-semibold text-lg mb-2" style="color: var(--text);">Wrap AI Calls</h3>
+                            <p class="text-sm leading-relaxed" style="color: var(--muted);">Wrap your AI API calls with <code class="px-1.5 py-0.5 rounded text-xs" style="background: rgba(0,194,255,0.1); color: var(--accent);">Volta::charge()</code> to bill per request.</p>
+                        </div>
+                    </div>
+
+                    <!-- Step 4 -->
+                    <div class="relative scroll-reveal md:text-left flex md:block items-start gap-4" :class="{ 'visible': shown }" :style="'transition-delay: 450ms'">
+                        <div class="w-12 h-12 rounded-full flex items-center justify-center shrink-0 md:mb-4 font-display text-xl" style="background: var(--accent); color: #080810;">4</div>
+                        <div>
+                            <h3 class="font-semibold text-lg mb-2" style="color: var(--text);">Connect Stripe</h3>
+                            <p class="text-sm leading-relaxed" style="color: var(--muted);">Link your Stripe account. Volta syncs plans, handles webhooks, and starts collecting payments.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -321,20 +634,33 @@
 
     <!-- ===== PRICING ===== -->
     <section id="pricing" class="py-20 md:py-28 px-6">
-        <div class="max-w-6xl mx-auto">
+        <div class="max-w-6xl mx-auto"
+             x-data="{ annual: false, shown: false }"
+             x-intersect:enter.once="shown = true">
             <div class="text-center mb-16">
                 <h2 class="font-display text-4xl md:text-5xl tracking-wide mb-4" style="color: var(--text);">SIMPLE PRICING</h2>
-                <p class="text-lg max-w-xl mx-auto" style="color: var(--muted);">No per-transaction fees. No revenue share. Just a flat monthly price.</p>
+                <p class="text-lg max-w-xl mx-auto mb-8" style="color: var(--muted);">No per-transaction fees. No revenue share. Just a flat monthly price.</p>
+
+                <!-- Billing toggle -->
+                <div class="flex items-center justify-center gap-3">
+                    <span class="text-sm" :style="!annual ? 'color: var(--text)' : 'color: var(--muted)'">Monthly</span>
+                    <div class="toggle-switch" :class="{ 'active': annual }" @click="annual = !annual">
+                        <div class="toggle-dot"></div>
+                    </div>
+                    <span class="text-sm" :style="annual ? 'color: var(--text)' : 'color: var(--muted)'">Annual</span>
+                    <span x-show="annual" x-transition class="text-xs font-semibold px-2 py-0.5 rounded-full" style="background: rgba(0,194,255,0.15); color: var(--accent);">Save 20%</span>
+                </div>
             </div>
 
             <div class="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
                 <!-- Indie -->
-                <div class="rounded-xl p-8 flex flex-col" style="background: var(--surface); border: 1px solid var(--border);">
+                <div class="scroll-reveal rounded-xl p-8 flex flex-col" :class="{ 'visible': shown }" :style="'transition-delay: 0ms'" style="background: var(--surface); border: 1px solid var(--border);">
                     <h3 class="font-display text-2xl tracking-wide mb-1" style="color: var(--text);">INDIE</h3>
                     <p class="text-sm mb-6" style="color: var(--muted);">For solo builders</p>
-                    <div class="mb-6">
-                        <span class="font-display text-5xl" style="color: var(--text);">$19</span>
+                    <div class="mb-6 price-fade">
+                        <span class="font-display text-5xl" style="color: var(--text);" x-text="annual ? '$15' : '$19'">$19</span>
                         <span class="text-sm" style="color: var(--muted);">/mo</span>
+                        <div x-show="annual" x-transition class="text-xs mt-1" style="color: var(--muted);">billed $182/yr</div>
                     </div>
                     <ul class="flex-1 space-y-3 mb-8 text-sm" style="color: var(--muted);">
                         <li class="flex items-start gap-2">
@@ -364,15 +690,16 @@
                 </div>
 
                 <!-- Studio (highlighted) -->
-                <div class="rounded-xl p-8 flex flex-col pricing-highlight relative" style="background: var(--surface); border: 2px solid var(--accent);">
+                <div class="scroll-reveal rounded-xl p-8 flex flex-col pricing-highlight relative" :class="{ 'visible': shown }" :style="'transition-delay: 100ms'" style="background: var(--surface); border: 2px solid var(--accent);">
                     <div class="absolute -top-3 left-1/2 -translate-x-1/2 text-xs font-semibold px-3 py-1 rounded-full" style="background: var(--accent); color: #080810;">
                         Most popular
                     </div>
                     <h3 class="font-display text-2xl tracking-wide mb-1" style="color: var(--text);">STUDIO</h3>
                     <p class="text-sm mb-6" style="color: var(--muted);">For growing teams</p>
-                    <div class="mb-6">
-                        <span class="font-display text-5xl" style="color: var(--text);">$49</span>
+                    <div class="mb-6 price-fade">
+                        <span class="font-display text-5xl" style="color: var(--text);" x-text="annual ? '$39' : '$49'">$49</span>
                         <span class="text-sm" style="color: var(--muted);">/mo</span>
+                        <div x-show="annual" x-transition class="text-xs mt-1" style="color: var(--muted);">billed $468/yr</div>
                     </div>
                     <ul class="flex-1 space-y-3 mb-8 text-sm" style="color: var(--muted);">
                         <li class="flex items-start gap-2">
@@ -406,12 +733,13 @@
                 </div>
 
                 <!-- Agency -->
-                <div class="rounded-xl p-8 flex flex-col" style="background: var(--surface); border: 1px solid var(--border);">
+                <div class="scroll-reveal rounded-xl p-8 flex flex-col" :class="{ 'visible': shown }" :style="'transition-delay: 200ms'" style="background: var(--surface); border: 1px solid var(--border);">
                     <h3 class="font-display text-2xl tracking-wide mb-1" style="color: var(--text);">AGENCY</h3>
                     <p class="text-sm mb-6" style="color: var(--muted);">For agencies &amp; scale</p>
-                    <div class="mb-6">
-                        <span class="font-display text-5xl" style="color: var(--text);">$149</span>
+                    <div class="mb-6 price-fade">
+                        <span class="font-display text-5xl" style="color: var(--text);" x-text="annual ? '$119' : '$149'">$149</span>
                         <span class="text-sm" style="color: var(--muted);">/mo</span>
+                        <div x-show="annual" x-transition class="text-xs mt-1" style="color: var(--muted);">billed $1,428/yr</div>
                     </div>
                     <ul class="flex-1 space-y-3 mb-8 text-sm" style="color: var(--muted);">
                         <li class="flex items-start gap-2">
@@ -448,19 +776,21 @@
     </section>
 
     <!-- ===== CTA ===== -->
-    <section class="py-20 md:py-28 px-6" style="background: var(--surface); border-top: 1px solid var(--border);">
-        <div class="max-w-3xl mx-auto text-center">
-            <h2 class="font-display text-4xl md:text-6xl tracking-wide mb-6" style="color: var(--text);">
+    <section class="relative py-20 md:py-28 px-6 cta-grid-bg" style="background-color: var(--surface); border-top: 1px solid var(--border);">
+        <div class="max-w-3xl mx-auto text-center relative z-10"
+             x-data="{ shown: false }"
+             x-intersect:enter.once="shown = true">
+            <h2 class="font-display text-4xl md:text-6xl tracking-wide mb-6 scroll-reveal" :class="{ 'visible': shown }" style="color: var(--text);">
                 STOP BUILDING<br><span style="color: var(--accent);">BILLING TWICE</span>
             </h2>
-            <p class="text-lg mb-10 max-w-xl mx-auto" style="color: var(--muted);">
+            <p class="text-lg mb-10 max-w-xl mx-auto scroll-reveal" :class="{ 'visible': shown }" :style="'transition-delay: 100ms'" style="color: var(--muted);">
                 You already built the AI. Let Volta handle the billing so you can ship faster and keep every dollar.
             </p>
-            <div class="flex flex-wrap justify-center gap-4">
-                <a href="/register" class="inline-block text-sm font-semibold px-8 py-3.5 rounded-lg transition-opacity hover:opacity-90" style="background: var(--accent); color: #080810;">
+            <div class="flex flex-wrap justify-center gap-4 scroll-reveal" :class="{ 'visible': shown }" :style="'transition-delay: 200ms'">
+                <a href="/register" class="hero-btn-primary inline-block font-semibold rounded-lg" style="background: var(--accent); color: #080810; padding: 16px 48px; font-size: 16px;">
                     Start your $7 trial
                 </a>
-                <a href="/docs" class="inline-block text-sm font-semibold px-8 py-3.5 rounded-lg border transition-colors hover:bg-white/5" style="border-color: var(--border); color: var(--text);">
+                <a href="/docs" class="hero-btn-ghost inline-block font-semibold rounded-lg border" style="border-color: var(--border); color: var(--text); padding: 16px 48px; font-size: 16px;">
                     Read the docs
                 </a>
             </div>
