@@ -13,7 +13,8 @@
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- Alpine.js -->
+    <!-- Alpine.js Intersect Plugin + Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.x.x/dist/cdn.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
     <style>
@@ -236,13 +237,20 @@
             100% { background: rgba(0,194,255,0.1); }
         }
 
-        /* Scroll reveal */
-        .scroll-reveal {
+        /* ===== Scroll animations — progressive enhancement ===== */
+        /* Default: always visible */
+        .scroll-animate {
+            opacity: 1;
+            transform: none;
+        }
+        /* Only hidden when JS has confirmed IntersectionObserver support */
+        .scroll-animate.animate-ready {
             opacity: 0;
             transform: translateY(20px);
             transition: opacity 0.4s ease-out, transform 0.4s ease-out;
         }
-        .scroll-reveal.visible {
+        /* Visible once scrolled into view */
+        .scroll-animate.animate-ready.animate-in {
             opacity: 1;
             transform: translateY(0);
         }
@@ -470,35 +478,30 @@
 
     <!-- ===== METRICS BAR ===== -->
     <section class="relative py-12 px-6" style="background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);"
-             x-data="{ shown: false }"
-             x-intersect:enter.once="shown = true">
-        <div class="metrics-line absolute top-0 left-0 right-0" :class="{ 'animate': shown }"></div>
+             x-data="{ started: false }"
+             x-intersect.once="started = true">
+        <div class="metrics-line absolute top-0 left-0 right-0" :class="{ 'animate': started }"></div>
         <div class="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             <div>
                 <div class="font-display text-4xl md:text-5xl mb-2" style="color: var(--accent);"
-                     x-text="shown ? Math.min(Math.round($el._counter || 0), 3) : '0'"
-                     x-effect="if (shown && !$el._started) { $el._started = true; let start = performance.now(); let animate = (now) => { let t = Math.min((now - start) / 600, 1); $el._counter = Math.round(3 * t); $el.textContent = Math.round(3 * t); if (t < 1) requestAnimationFrame(animate); }; requestAnimationFrame(animate); }">0</div>
+                     x-data="{ val: 3 }"
+                     x-effect="if (started) { val = 0; let n = 0; let t = setInterval(() => { n++; val = n; if (n >= 3) clearInterval(t); }, 200); }"
+                     x-text="val">3</div>
                 <div class="text-sm" style="color: var(--muted);">Lines to integrate</div>
             </div>
             <div>
                 <div class="font-display text-4xl md:text-5xl mb-2" style="color: var(--accent);"
-                     x-data="{ val: 0 }"
-                     x-effect="if (shown && val === 0) { let start = performance.now(); let animate = (now) => { let t = Math.min((now - start) / 1200, 1); val = Math.round(100 * t); if (t < 1) requestAnimationFrame(animate); }; requestAnimationFrame(animate); }"
-                     x-text="val + '%'">0%</div>
+                     x-data="{ val: 100 }"
+                     x-effect="if (started) { val = 0; let n = 0; let t = setInterval(() => { n += 5; val = n; if (n >= 100) clearInterval(t); }, 60); }"
+                     x-text="val + '%'">100%</div>
                 <div class="text-sm" style="color: var(--muted);">Revenue to you</div>
             </div>
             <div>
-                <div class="font-display text-4xl md:text-5xl mb-2" style="color: var(--accent);"
-                     x-data="{ val: 0 }"
-                     x-effect="if (shown && val === 0) { val = 0; }"
-                     x-text="val + '%'">0%</div>
+                <div class="font-display text-4xl md:text-5xl mb-2" style="color: var(--accent);">0%</div>
                 <div class="text-sm" style="color: var(--muted);">Cut taken</div>
             </div>
             <div>
-                <div class="font-display text-4xl md:text-5xl mb-2" style="color: var(--accent);"
-                     x-data="{ visible: false }"
-                     x-effect="if (shown) { setTimeout(() => visible = true, 400) }"
-                     :style="visible ? 'opacity:1; transition: opacity 0.4s' : 'opacity:0'">&infin;</div>
+                <div class="font-display text-4xl md:text-5xl mb-2" style="color: var(--accent);">&infin;</div>
                 <div class="text-sm" style="color: var(--muted);">End users</div>
             </div>
         </div>
@@ -512,11 +515,9 @@
                 <p class="text-lg max-w-xl mx-auto" style="color: var(--muted);">Built for developers shipping AI products. No billing headaches.</p>
             </div>
 
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
-                 x-data="{ shown: false }"
-                 x-intersect:enter.once="shown = true">
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- Card 1 -->
-                <div class="feature-card scroll-reveal rounded-xl p-6" :class="{ 'visible': shown }" :style="'transition-delay: 0ms'" style="background: var(--surface); border: 1px solid var(--border);">
+                <div class="feature-card scroll-animate rounded-xl p-6" style="background: var(--surface); border: 1px solid var(--border); transition-delay: 0ms;">
                     <div class="feature-icon w-10 h-10 rounded-lg flex items-center justify-center mb-4 text-lg font-bold" style="background: rgba(0,194,255,0.1); color: var(--accent);">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                     </div>
@@ -525,7 +526,7 @@
                 </div>
 
                 <!-- Card 2 -->
-                <div class="feature-card scroll-reveal rounded-xl p-6" :class="{ 'visible': shown }" :style="'transition-delay: 100ms'" style="background: var(--surface); border: 1px solid var(--border);">
+                <div class="feature-card scroll-animate rounded-xl p-6" style="background: var(--surface); border: 1px solid var(--border); transition-delay: 100ms;">
                     <div class="feature-icon w-10 h-10 rounded-lg flex items-center justify-center mb-4 text-lg font-bold" style="background: rgba(0,194,255,0.1); color: var(--accent);">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                     </div>
@@ -534,7 +535,7 @@
                 </div>
 
                 <!-- Card 3 -->
-                <div class="feature-card scroll-reveal rounded-xl p-6" :class="{ 'visible': shown }" :style="'transition-delay: 200ms'" style="background: var(--surface); border: 1px solid var(--border);">
+                <div class="feature-card scroll-animate rounded-xl p-6" style="background: var(--surface); border: 1px solid var(--border); transition-delay: 200ms;">
                     <div class="feature-icon w-10 h-10 rounded-lg flex items-center justify-center mb-4 text-lg font-bold" style="background: rgba(0,194,255,0.1); color: var(--accent);">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
                     </div>
@@ -543,7 +544,7 @@
                 </div>
 
                 <!-- Card 4 -->
-                <div class="feature-card scroll-reveal rounded-xl p-6" :class="{ 'visible': shown }" :style="'transition-delay: 300ms'" style="background: var(--surface); border: 1px solid var(--border);">
+                <div class="feature-card scroll-animate rounded-xl p-6" style="background: var(--surface); border: 1px solid var(--border); transition-delay: 300ms;">
                     <div class="feature-icon w-10 h-10 rounded-lg flex items-center justify-center mb-4 text-lg font-bold" style="background: rgba(0,194,255,0.1); color: var(--accent);">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
                     </div>
@@ -552,7 +553,7 @@
                 </div>
 
                 <!-- Card 5 -->
-                <div class="feature-card scroll-reveal rounded-xl p-6" :class="{ 'visible': shown }" :style="'transition-delay: 400ms'" style="background: var(--surface); border: 1px solid var(--border);">
+                <div class="feature-card scroll-animate rounded-xl p-6" style="background: var(--surface); border: 1px solid var(--border); transition-delay: 400ms;">
                     <div class="feature-icon w-10 h-10 rounded-lg flex items-center justify-center mb-4 text-lg font-bold" style="background: rgba(0,194,255,0.1); color: var(--accent);">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/></svg>
                     </div>
@@ -561,7 +562,7 @@
                 </div>
 
                 <!-- Card 6 -->
-                <div class="feature-card scroll-reveal rounded-xl p-6" :class="{ 'visible': shown }" :style="'transition-delay: 500ms'" style="background: var(--surface); border: 1px solid var(--border);">
+                <div class="feature-card scroll-animate rounded-xl p-6" style="background: var(--surface); border: 1px solid var(--border); transition-delay: 500ms;">
                     <div class="feature-icon w-10 h-10 rounded-lg flex items-center justify-center mb-4 text-lg font-bold" style="background: rgba(0,194,255,0.1); color: var(--accent);">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"/></svg>
                     </div>
@@ -582,7 +583,7 @@
 
             <div class="relative"
                  x-data="{ shown: false }"
-                 x-intersect:enter.once="shown = true">
+                 x-intersect.once="shown = true">
                 <!-- Desktop horizontal line -->
                 <div class="hidden md:block stepper-line"></div>
                 <div class="hidden md:block stepper-line-fill" :class="{ 'animate': shown }"></div>
@@ -593,7 +594,7 @@
 
                 <div class="grid md:grid-cols-4 gap-8 md:gap-6">
                     <!-- Step 1 -->
-                    <div class="relative scroll-reveal md:text-left flex md:block items-start gap-4" :class="{ 'visible': shown }" :style="'transition-delay: 0ms'">
+                    <div class="relative scroll-animate md:text-left flex md:block items-start gap-4" style="transition-delay: 0ms;">
                         <div class="w-12 h-12 rounded-full flex items-center justify-center shrink-0 md:mb-4 font-display text-xl" style="background: var(--accent); color: #080810;">1</div>
                         <div>
                             <h3 class="font-semibold text-lg mb-2" style="color: var(--text);">Create App</h3>
@@ -602,7 +603,7 @@
                     </div>
 
                     <!-- Step 2 -->
-                    <div class="relative scroll-reveal md:text-left flex md:block items-start gap-4" :class="{ 'visible': shown }" :style="'transition-delay: 150ms'">
+                    <div class="relative scroll-animate md:text-left flex md:block items-start gap-4" style="transition-delay: 150ms;">
                         <div class="w-12 h-12 rounded-full flex items-center justify-center shrink-0 md:mb-4 font-display text-xl" style="background: var(--accent); color: #080810;">2</div>
                         <div>
                             <h3 class="font-semibold text-lg mb-2" style="color: var(--text);">Install Package</h3>
@@ -611,7 +612,7 @@
                     </div>
 
                     <!-- Step 3 -->
-                    <div class="relative scroll-reveal md:text-left flex md:block items-start gap-4" :class="{ 'visible': shown }" :style="'transition-delay: 300ms'">
+                    <div class="relative scroll-animate md:text-left flex md:block items-start gap-4" style="transition-delay: 300ms;">
                         <div class="w-12 h-12 rounded-full flex items-center justify-center shrink-0 md:mb-4 font-display text-xl" style="background: var(--accent); color: #080810;">3</div>
                         <div>
                             <h3 class="font-semibold text-lg mb-2" style="color: var(--text);">Wrap AI Calls</h3>
@@ -620,7 +621,7 @@
                     </div>
 
                     <!-- Step 4 -->
-                    <div class="relative scroll-reveal md:text-left flex md:block items-start gap-4" :class="{ 'visible': shown }" :style="'transition-delay: 450ms'">
+                    <div class="relative scroll-animate md:text-left flex md:block items-start gap-4" style="transition-delay: 450ms;">
                         <div class="w-12 h-12 rounded-full flex items-center justify-center shrink-0 md:mb-4 font-display text-xl" style="background: var(--accent); color: #080810;">4</div>
                         <div>
                             <h3 class="font-semibold text-lg mb-2" style="color: var(--text);">Connect Stripe</h3>
@@ -634,9 +635,7 @@
 
     <!-- ===== PRICING ===== -->
     <section id="pricing" class="py-20 md:py-28 px-6">
-        <div class="max-w-6xl mx-auto"
-             x-data="{ annual: false, shown: false }"
-             x-intersect:enter.once="shown = true">
+        <div class="max-w-6xl mx-auto" x-data="{ annual: false }">
             <div class="text-center mb-16">
                 <h2 class="font-display text-4xl md:text-5xl tracking-wide mb-4" style="color: var(--text);">SIMPLE PRICING</h2>
                 <p class="text-lg max-w-xl mx-auto mb-8" style="color: var(--muted);">No per-transaction fees. No revenue share. Just a flat monthly price.</p>
@@ -654,7 +653,7 @@
 
             <div class="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
                 <!-- Indie -->
-                <div class="scroll-reveal rounded-xl p-8 flex flex-col" :class="{ 'visible': shown }" :style="'transition-delay: 0ms'" style="background: var(--surface); border: 1px solid var(--border);">
+                <div class="scroll-animate rounded-xl p-8 flex flex-col" style="background: var(--surface); border: 1px solid var(--border); transition-delay: 0ms;">
                     <h3 class="font-display text-2xl tracking-wide mb-1" style="color: var(--text);">INDIE</h3>
                     <p class="text-sm mb-6" style="color: var(--muted);">For solo builders</p>
                     <div class="mb-6 price-fade">
@@ -690,7 +689,7 @@
                 </div>
 
                 <!-- Studio (highlighted) -->
-                <div class="scroll-reveal rounded-xl p-8 flex flex-col pricing-highlight relative" :class="{ 'visible': shown }" :style="'transition-delay: 100ms'" style="background: var(--surface); border: 2px solid var(--accent);">
+                <div class="scroll-animate rounded-xl p-8 flex flex-col pricing-highlight relative" style="background: var(--surface); border: 2px solid var(--accent); transition-delay: 100ms;">
                     <div class="absolute -top-3 left-1/2 -translate-x-1/2 text-xs font-semibold px-3 py-1 rounded-full" style="background: var(--accent); color: #080810;">
                         Most popular
                     </div>
@@ -733,7 +732,7 @@
                 </div>
 
                 <!-- Agency -->
-                <div class="scroll-reveal rounded-xl p-8 flex flex-col" :class="{ 'visible': shown }" :style="'transition-delay: 200ms'" style="background: var(--surface); border: 1px solid var(--border);">
+                <div class="scroll-animate rounded-xl p-8 flex flex-col" style="background: var(--surface); border: 1px solid var(--border); transition-delay: 200ms;">
                     <h3 class="font-display text-2xl tracking-wide mb-1" style="color: var(--text);">AGENCY</h3>
                     <p class="text-sm mb-6" style="color: var(--muted);">For agencies &amp; scale</p>
                     <div class="mb-6 price-fade">
@@ -777,16 +776,14 @@
 
     <!-- ===== CTA ===== -->
     <section class="relative py-20 md:py-28 px-6 cta-grid-bg" style="background-color: var(--surface); border-top: 1px solid var(--border);">
-        <div class="max-w-3xl mx-auto text-center relative z-10"
-             x-data="{ shown: false }"
-             x-intersect:enter.once="shown = true">
-            <h2 class="font-display text-4xl md:text-6xl tracking-wide mb-6 scroll-reveal" :class="{ 'visible': shown }" style="color: var(--text);">
+        <div class="max-w-3xl mx-auto text-center relative z-10">
+            <h2 class="font-display text-4xl md:text-6xl tracking-wide mb-6 scroll-animate" style="color: var(--text);">
                 STOP BUILDING<br><span style="color: var(--accent);">BILLING TWICE</span>
             </h2>
-            <p class="text-lg mb-10 max-w-xl mx-auto scroll-reveal" :class="{ 'visible': shown }" :style="'transition-delay: 100ms'" style="color: var(--muted);">
+            <p class="text-lg mb-10 max-w-xl mx-auto scroll-animate" style="color: var(--muted); transition-delay: 100ms;">
                 You already built the AI. Let Volta handle the billing so you can ship faster and keep every dollar.
             </p>
-            <div class="flex flex-wrap justify-center gap-4 scroll-reveal" :class="{ 'visible': shown }" :style="'transition-delay: 200ms'">
+            <div class="flex flex-wrap justify-center gap-4 scroll-animate" style="transition-delay: 200ms;">
                 <a href="/register" class="hero-btn-primary inline-block font-semibold rounded-lg" style="background: var(--accent); color: #080810; padding: 16px 48px; font-size: 16px;">
                     Start your $7 trial
                 </a>
@@ -815,6 +812,30 @@
             </div>
         </div>
     </footer>
+
+    <!-- Scroll animation progressive enhancement -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!('IntersectionObserver' in window)) return;
+
+            document.querySelectorAll('.scroll-animate').forEach(function(el) {
+                el.classList.add('animate-ready');
+            });
+
+            var observer = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate-in');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.scroll-animate').forEach(function(el) {
+                observer.observe(el);
+            });
+        });
+    </script>
 
 </body>
 </html>
