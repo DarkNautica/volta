@@ -146,13 +146,11 @@
                         Current Plan
                     </div>
                 @else
-                    <form method="POST" action="/dashboard/billing/subscribe">
+                    <form method="POST" action="/dashboard/billing/subscribe" @submit="loadingPlan = 'indie'">
                         @csrf
                         <input type="hidden" name="plan" value="indie">
                         <input type="hidden" name="billing_period" :value="annual ? 'annual' : 'monthly'">
                         <button type="submit"
-                                :disabled="loadingPlan === 'indie'"
-                                @click="loadingPlan = 'indie'"
                                 style="width: 100%; padding: 13px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; background: transparent; color: #f0f0ff; border: 1px solid rgba(255,255,255,0.15); transition: all 0.2s;"
                                 onmouseover="this.style.borderColor='#00C2FF'; this.style.color='#00C2FF';"
                                 onmouseout="this.style.borderColor='rgba(255,255,255,0.15)'; this.style.color='#f0f0ff';">
@@ -208,13 +206,11 @@
                         Current Plan
                     </div>
                 @else
-                    <form method="POST" action="/dashboard/billing/subscribe">
+                    <form method="POST" action="/dashboard/billing/subscribe" @submit="loadingPlan = 'studio'">
                         @csrf
                         <input type="hidden" name="plan" value="studio">
                         <input type="hidden" name="billing_period" :value="annual ? 'annual' : 'monthly'">
                         <button type="submit"
-                                :disabled="loadingPlan === 'studio'"
-                                @click="loadingPlan = 'studio'"
                                 style="width: 100%; padding: 13px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; background: #00C2FF; color: #080810; border: none; transition: opacity 0.2s;"
                                 onmouseover="this.style.opacity='0.85'"
                                 onmouseout="this.style.opacity='1'">
@@ -264,13 +260,11 @@
                         Current Plan
                     </div>
                 @else
-                    <form method="POST" action="/dashboard/billing/subscribe">
+                    <form method="POST" action="/dashboard/billing/subscribe" @submit="loadingPlan = 'agency'">
                         @csrf
                         <input type="hidden" name="plan" value="agency">
                         <input type="hidden" name="billing_period" :value="annual ? 'annual' : 'monthly'">
                         <button type="submit"
-                                :disabled="loadingPlan === 'agency'"
-                                @click="loadingPlan = 'agency'"
                                 style="width: 100%; padding: 13px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; background: transparent; color: #f0f0ff; border: 1px solid rgba(255,255,255,0.15); transition: all 0.2s;"
                                 onmouseover="this.style.borderColor='#00C2FF'; this.style.color='#00C2FF';"
                                 onmouseout="this.style.borderColor='rgba(255,255,255,0.15)'; this.style.color='#f0f0ff';">
