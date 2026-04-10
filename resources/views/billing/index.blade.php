@@ -81,7 +81,6 @@
 
     {{-- Plans --}}
     <div x-data="{ annual: false, loadingPlan: null }">
-        <p style="color:red;font-size:11px;" x-text="'loadingPlan: ' + loadingPlan + ' | annual: ' + annual"></p>
 
         {{-- Toggle --}}
         <div style="display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 2.5rem;">
