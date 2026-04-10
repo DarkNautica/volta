@@ -9,7 +9,7 @@
     </ul>
 
     <h2>Step 1: Install the package</h2>
-    @include('docs.partials._code-block', ['language' => 'bash', 'code' => 'composer require volta-api/volta-php'])
+    @include('docs.partials._code-block', ['language' => 'bash', 'code' => 'composer require darknautica/volta-php'])
 
     <h2>Step 2: Publish the config</h2>
     @include('docs.partials._code-block', ['language' => 'bash', 'code' => 'php artisan vendor:publish --tag=volta-config'])

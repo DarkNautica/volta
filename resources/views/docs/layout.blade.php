@@ -328,7 +328,7 @@
         {{-- Right links --}}
         <div class="flex items-center gap-4 ml-auto">
             <a href="/dashboard" class="text-sm font-medium hover:opacity-80" style="color: rgba(240,240,255,0.6); text-decoration: none;">Dashboard &rarr;</a>
-            <a href="https://github.com" class="text-sm font-medium hover:opacity-80" style="color: rgba(240,240,255,0.6); text-decoration: none;">GitHub</a>
+            <a href="https://github.com/DarkNautica/volta" target="_blank" class="text-sm font-medium hover:opacity-80" style="color: rgba(240,240,255,0.6); text-decoration: none;">GitHub</a>
         </div>
     </div>
 

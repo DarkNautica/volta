@@ -1,27 +1,44 @@
 @php
-    $type = $type ?? 'info';
-    $title = $title ?? null;
+    $calloutType = $type ?? 'info';
+    $calloutTitle = $title ?? null;
     $content = $content ?? '';
 
-    $styles = [
-        'info'    => ['border' => '#3b82f6', 'bg' => '#eff6ff', 'title_color' => '#1d4ed8', 'icon' => 'M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'],
-        'warning' => ['border' => '#f59e0b', 'bg' => '#fffbeb', 'title_color' => '#b45309', 'icon' => 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z'],
-        'danger'  => ['border' => '#ef4444', 'bg' => '#fef2f2', 'title_color' => '#b91c1c', 'icon' => 'M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'],
-        'tip'     => ['border' => '#22c55e', 'bg' => '#f0fdf4', 'title_color' => '#15803d', 'icon' => 'M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z'],
+    $icons = [
+        'info'    => 'ℹ',
+        'warning' => '⚠',
+        'danger'  => '✕',
+        'tip'     => '✓',
     ];
-    $s = $styles[$type] ?? $styles['info'];
+    $icon = $icons[$calloutType] ?? $icons['info'];
 @endphp
 
-<div class="rounded-lg p-4 mb-6" style="border-left: 4px solid {{ $s['border'] }}; background-color: {{ $s['bg'] }};">
-    <div class="flex gap-3">
-        <svg class="w-5 h-5 flex-shrink-0 mt-0.5" style="color: {{ $s['border'] }};" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $s['icon'] }}"/>
-        </svg>
-        <div>
-            @if($title)
-                <p class="font-semibold text-sm mb-1" style="color: {{ $s['title_color'] }};">{{ $title }}</p>
-            @endif
-            <div class="text-sm" style="color: #374151; line-height: 1.6;">{!! $content !!}</div>
-        </div>
-    </div>
+<style>
+.callout {
+    border-left: 3px solid;
+    border-radius: 0 8px 8px 0;
+    padding: 1rem 1.25rem;
+    margin: 1.5rem 0;
+    font-size: 14.5px;
+    line-height: 1.7;
+}
+.callout-title {
+    font-weight: 600; font-size: 13px;
+    text-transform: uppercase; letter-spacing: 0.06em;
+    margin-bottom: 4px;
+}
+.callout-info    { background: rgba(0,194,255,0.06); border-color: #00C2FF; color: #1a1a2e; }
+.callout-warning { background: rgba(251,191,36,0.08); border-color: #fbbf24; color: #1a1a2e; }
+.callout-danger  { background: rgba(239,68,68,0.08); border-color: #ef4444; color: #1a1a2e; }
+.callout-tip     { background: rgba(134,239,172,0.08); border-color: #86efac; color: #1a1a2e; }
+.callout-info .callout-title    { color: #0099cc; }
+.callout-warning .callout-title { color: #d97706; }
+.callout-danger .callout-title  { color: #dc2626; }
+.callout-tip .callout-title     { color: #16a34a; }
+</style>
+
+<div class="callout callout-{{ $calloutType }} mb-6">
+    @if($calloutTitle)
+        <div class="callout-title">{{ $icon }} {{ $calloutTitle }}</div>
+    @endif
+    <div>{!! $content !!}</div>
 </div>

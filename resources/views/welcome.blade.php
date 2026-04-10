@@ -127,8 +127,8 @@
                 <a href="#features" class="text-sm hover:opacity-100 transition-opacity" style="color: var(--muted);">Features</a>
                 <a href="#how-it-works" class="text-sm hover:opacity-100 transition-opacity" style="color: var(--muted);">How it works</a>
                 <a href="#pricing" class="text-sm hover:opacity-100 transition-opacity" style="color: var(--muted);">Pricing</a>
-                <a href="#" class="text-sm hover:opacity-100 transition-opacity" style="color: var(--muted);">Docs</a>
-                <a href="#" class="text-sm font-semibold px-5 py-2 rounded-lg transition-opacity hover:opacity-90" style="background: var(--accent); color: #080810;">
+                <a href="/docs" class="text-sm hover:opacity-100 transition-opacity" style="color: var(--muted);">Docs</a>
+                <a href="/register" class="text-sm font-semibold px-5 py-2 rounded-lg transition-opacity hover:opacity-90" style="background: var(--accent); color: #080810;">
                     Start $7 trial
                 </a>
             </div>
@@ -145,8 +145,8 @@
             <a href="#features" @click="mobileMenu = false" class="text-sm py-2" style="color: var(--muted);">Features</a>
             <a href="#how-it-works" @click="mobileMenu = false" class="text-sm py-2" style="color: var(--muted);">How it works</a>
             <a href="#pricing" @click="mobileMenu = false" class="text-sm py-2" style="color: var(--muted);">Pricing</a>
-            <a href="#" class="text-sm py-2" style="color: var(--muted);">Docs</a>
-            <a href="#" class="text-sm font-semibold px-5 py-2.5 rounded-lg text-center" style="background: var(--accent); color: #080810;">Start $7 trial</a>
+            <a href="/docs" class="text-sm py-2" style="color: var(--muted);">Docs</a>
+            <a href="/register" class="text-sm font-semibold px-5 py-2.5 rounded-lg text-center" style="background: var(--accent); color: #080810;">Start $7 trial</a>
         </div>
     </nav>
 
@@ -162,10 +162,10 @@
                     Drop-in billing infrastructure for AI apps. Charge per token, per request, or per feature &mdash; in three lines of code.
                 </p>
                 <div class="flex flex-wrap gap-4">
-                    <a href="#" class="inline-block text-sm font-semibold px-7 py-3 rounded-lg transition-opacity hover:opacity-90" style="background: var(--accent); color: #080810;">
+                    <a href="/register" class="inline-block text-sm font-semibold px-7 py-3 rounded-lg transition-opacity hover:opacity-90" style="background: var(--accent); color: #080810;">
                         Start $7 trial
                     </a>
-                    <a href="#" class="inline-block text-sm font-semibold px-7 py-3 rounded-lg border transition-colors hover:bg-white/5" style="border-color: var(--border); color: var(--text);">
+                    <a href="/docs" class="inline-block text-sm font-semibold px-7 py-3 rounded-lg border transition-colors hover:bg-white/5" style="border-color: var(--border); color: var(--text);">
                         View docs
                     </a>
                 </div>
@@ -298,7 +298,7 @@
                     <div class="hidden md:block step-connector"></div>
                     <div class="w-12 h-12 rounded-full flex items-center justify-center mx-auto md:mx-0 mb-4 font-display text-xl" style="background: var(--accent); color: #080810;">2</div>
                     <h3 class="font-semibold text-lg mb-2" style="color: var(--text);">Install Package</h3>
-                    <p class="text-sm leading-relaxed" style="color: var(--muted);">Run <code class="px-1.5 py-0.5 rounded text-xs" style="background: rgba(0,194,255,0.1); color: var(--accent);">composer require volta/billing</code> and add your key to .env.</p>
+                    <p class="text-sm leading-relaxed" style="color: var(--muted);">Run <code class="px-1.5 py-0.5 rounded text-xs" style="background: rgba(0,194,255,0.1); color: var(--accent);">composer require darknautica/volta-php</code> and add your key to .env.</p>
                 </div>
 
                 <!-- Step 3 -->
@@ -358,7 +358,7 @@
                             Community support
                         </li>
                     </ul>
-                    <a href="#" class="block text-center text-sm font-semibold px-6 py-3 rounded-lg border transition-colors hover:bg-white/5" style="border-color: var(--border); color: var(--text);">
+                    <a href="/register" class="block text-center text-sm font-semibold px-6 py-3 rounded-lg border transition-colors hover:bg-white/5" style="border-color: var(--border); color: var(--text);">
                         Get started
                     </a>
                 </div>
@@ -400,7 +400,7 @@
                             Priority support
                         </li>
                     </ul>
-                    <a href="#" class="block text-center text-sm font-semibold px-6 py-3 rounded-lg transition-opacity hover:opacity-90" style="background: var(--accent); color: #080810;">
+                    <a href="/register" class="block text-center text-sm font-semibold px-6 py-3 rounded-lg transition-opacity hover:opacity-90" style="background: var(--accent); color: #080810;">
                         Start $7 trial
                     </a>
                 </div>
@@ -439,7 +439,7 @@
                             Dedicated support
                         </li>
                     </ul>
-                    <a href="#" class="block text-center text-sm font-semibold px-6 py-3 rounded-lg border transition-colors hover:bg-white/5" style="border-color: var(--border); color: var(--text);">
+                    <a href="mailto:hello@volta.dev" class="block text-center text-sm font-semibold px-6 py-3 rounded-lg border transition-colors hover:bg-white/5" style="border-color: var(--border); color: var(--text);">
                         Contact sales
                     </a>
                 </div>
@@ -457,10 +457,10 @@
                 You already built the AI. Let Volta handle the billing so you can ship faster and keep every dollar.
             </p>
             <div class="flex flex-wrap justify-center gap-4">
-                <a href="#" class="inline-block text-sm font-semibold px-8 py-3.5 rounded-lg transition-opacity hover:opacity-90" style="background: var(--accent); color: #080810;">
+                <a href="/register" class="inline-block text-sm font-semibold px-8 py-3.5 rounded-lg transition-opacity hover:opacity-90" style="background: var(--accent); color: #080810;">
                     Start your $7 trial
                 </a>
-                <a href="#" class="inline-block text-sm font-semibold px-8 py-3.5 rounded-lg border transition-colors hover:bg-white/5" style="border-color: var(--border); color: var(--text);">
+                <a href="/docs" class="inline-block text-sm font-semibold px-8 py-3.5 rounded-lg border transition-colors hover:bg-white/5" style="border-color: var(--border); color: var(--text);">
                     Read the docs
                 </a>
             </div>
@@ -479,7 +479,7 @@
             <div class="flex items-center gap-6">
                 <a href="#features" class="text-sm hover:opacity-100 transition-opacity" style="color: var(--muted);">Features</a>
                 <a href="#pricing" class="text-sm hover:opacity-100 transition-opacity" style="color: var(--muted);">Pricing</a>
-                <a href="#" class="text-sm hover:opacity-100 transition-opacity" style="color: var(--muted);">Docs</a>
+                <a href="/docs" class="text-sm hover:opacity-100 transition-opacity" style="color: var(--muted);">Docs</a>
                 <a href="#" class="text-sm hover:opacity-100 transition-opacity" style="color: var(--muted);">Privacy</a>
                 <a href="#" class="text-sm hover:opacity-100 transition-opacity" style="color: var(--muted);">Terms</a>
             </div>

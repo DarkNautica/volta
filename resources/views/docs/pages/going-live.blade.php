@@ -17,12 +17,12 @@
                 ['Test a real credit purchase end to end', 'Complete a full purchase flow: portal → checkout → webhook → balance increase.'],
             ];
         @endphp
-        @foreach($items as [$title, $desc])
+        @foreach($items as [$itemTitle, $desc])
             <div class="flex items-start gap-3 p-4 rounded-lg" style="background-color: #f8fafc; border: 1px solid #e2e8f0;">
                 <div class="flex-shrink-0 w-5 h-5 mt-0.5 rounded border-2 flex items-center justify-center" style="border-color: #cbd5e1;">
                 </div>
                 <div>
-                    <p class="font-semibold text-sm mb-0.5" style="color: #0a0a1a;">{{ $title }}</p>
+                    <p class="font-semibold text-sm mb-0.5" style="color: #0a0a1a;">{{ $itemTitle }}</p>
                     <p class="text-sm" style="color: #64748b; margin: 0;">{{ $desc }}</p>
                 </div>
             </div>

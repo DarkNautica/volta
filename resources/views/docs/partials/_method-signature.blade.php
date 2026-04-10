@@ -1,5 +1,25 @@
-<div class="rounded-lg p-4 mb-6 overflow-x-auto" style="background-color: #0f1117; border: 1px solid rgba(255,255,255,0.06);">
-    <code class="text-sm" style="font-family: 'JetBrains Mono', monospace;">
-        <span style="color: #00C2FF;">{{ $method }}</span><span style="color: #e2e8f0;">(</span><span style="color: rgba(226,232,240,0.7);">{{ $params ?? '' }}</span><span style="color: #e2e8f0;">): </span><span style="color: #a78bfa;">{{ $returns ?? 'void' }}</span>
+<style>
+.method-sig {
+    background: #0a0a14;
+    border: 1px solid rgba(0,194,255,0.2);
+    border-radius: 8px;
+    padding: 1rem 1.5rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    margin: 1.5rem 0;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+.sig-class  { color: #00C2FF; font-weight: 600; }
+.sig-method { color: #c792ea; font-weight: 600; }
+.sig-scope  { color: #89ddff; }
+.sig-param  { color: #f78c6c; }
+.sig-type   { color: rgba(240,240,255,0.45); font-size: 13px; }
+.sig-return { color: #86efac; }
+</style>
+
+<div class="method-sig mb-6">
+    <code>
+        <span class="sig-class">{{ $method }}</span><span class="sig-scope">(</span><span class="sig-param">{{ $params ?? '' }}</span><span class="sig-scope">): </span><span class="sig-return">{{ $returns ?? 'void' }}</span>
     </code>
 </div>

@@ -23,7 +23,7 @@ return [
     | The Volta API endpoint. Override this if you're self-hosting
     | or running Volta locally for development.
     */
-    'base_url' => env('VOLTA_BASE_URL', 'https://api.volta.dev/v1'),
+    'base_url' => env('VOLTA_BASE_URL', 'https://volta-main-7omebh.laravel.cloud'),
 
     /*
     |--------------------------------------------------------------------------
@@ -84,7 +84,7 @@ CODEBLOCK;
             </tr>
             <tr>
                 <td><code>base_url</code></td>
-                <td><code>https://api.volta.dev/v1</code></td>
+                <td><code>https://volta-main-7omebh.laravel.cloud</code></td>
                 <td>Volta API endpoint URL</td>
             </tr>
             <tr>
@@ -128,7 +128,7 @@ CODEBLOCK;
             <tr>
                 <td><code>VOLTA_BASE_URL</code></td>
                 <td>No</td>
-                <td><code>https://volta.test/api/v1</code></td>
+                <td><code>https://volta-main-7omebh.laravel.cloud</code></td>
             </tr>
             <tr>
                 <td><code>VOLTA_VERIFY_SSL</code></td>

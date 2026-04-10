@@ -17,11 +17,11 @@
                 ['Balance decreases', 'Credits are deducted. The cycle repeats.'],
             ];
         @endphp
-        @foreach($steps as $i => [$title, $desc])
+        @foreach($steps as $i => [$stepTitle, $desc])
             <div class="flex items-start gap-4 p-4 rounded-lg" style="background-color: #f8fafc; border: 1px solid #e2e8f0;">
                 <div class="flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold" style="background-color: #00C2FF; color: #0a0a1a;">{{ $i + 1 }}</div>
                 <div>
-                    <p class="font-semibold text-sm mb-0.5" style="color: #0a0a1a;">{{ $title }}</p>
+                    <p class="font-semibold text-sm mb-0.5" style="color: #0a0a1a;">{{ $stepTitle }}</p>
                     <p class="text-sm" style="color: #64748b; margin: 0;">{{ $desc }}</p>
                 </div>
             </div>
